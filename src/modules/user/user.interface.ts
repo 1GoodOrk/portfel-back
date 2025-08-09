@@ -1,11 +1,11 @@
 export interface UserData {
-  username: string;
+  id: string;
   email: string;
   token: string;
-  bio: string;
-  image?: string;
+  portfolioIds: string;
+  projectIds: string;
 }
 
 export interface UserRO {
-  user: UserData;
+  data: UserData;
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getRepository, DeleteResult } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
+import { CreateDto, LoginDto, UpdateDto } from './dto';
 const jwt = require('jsonwebtoken');
 import { SECRET } from '../../config';
 import { UserRO } from './user.interface';
@@ -10,20 +10,21 @@ import { validate } from 'class-validator';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
 import * as argon2 from 'argon2';
+import { v6 } from 'uuid';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly repository: Repository<UserEntity>,
   ) {}
 
   // Promise<Array<UserEntity>>
   async findAll(): Promise<any> {
-    return await this.userRepository.find();
+    return await this.repository.find();
   }
 // Promise<UserEntity> | null
-  async findOne({ email, password }: LoginUserDto): Promise<any> {
+  async findOne({ email, password }: LoginDto): Promise<any> {
     // const user = await this.userRepository.findOne({ email: email });
     // if (!user) {
     //   return null;
@@ -36,98 +37,109 @@ export class UserService {
     // return null;
   }
 
-  async create(dto: CreateUserDto): Promise<UserRO> {
+  async create(dto: CreateDto): Promise<any> {
+    console.log(1)
     // check uniqueness of username/email
-    const { username, email, password } = dto;
-    const qb = await getRepository(UserEntity)
-      .createQueryBuilder('user')
-      .where('user.username = :username', { username })
-      .orWhere('user.email = :email', { email });
+    const { organization, email, password } = dto;
+    console.log(2, organization, email, password)
+    // const qb = await getRepository(UserEntity)
+    //   .createQueryBuilder('user')
+    //   .orWhere('user.email = :email', { email });
+    // console.log(3)
 
-    const user = await qb.getOne();
+    // const data = await qb.getOne();
+    // console.log(4, data)
 
-    if (user) {
-      const errors = { username: 'Username and email must be unique.' };
-      throw new HttpException(
-        { message: 'Input data validation failed', errors },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // if (data) {
+    //   const errors = { email: 'Username and email must be unique.' };
+    //   throw new HttpException(
+    //     { message: 'Input data validation failed', errors },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
-    // create new user
+    console.log(5)
     const newUser = new UserEntity();
-    newUser.username = username;
+    newUser._id = v6()
+    newUser.organization = organization;
     newUser.email = email;
     newUser.password = password;
-    newUser.articles = [];
+    newUser.token = this.generateJWT(newUser);
+    newUser.projectIds = [];
+    newUser.portfolioIds = [];
+    console.log(6, newUser)
 
     const errors = await validate(newUser);
     if (errors.length > 0) {
-      const _errors = { username: 'Userinput is not valid.' };
+      console.log(7, errors)
+      const _errors = { USER: 'USER_NOT_VALID' };
       throw new HttpException(
         { message: 'Input data validation failed', _errors },
         HttpStatus.BAD_REQUEST,
       );
     } else {
-      const savedUser = await this.userRepository.save(newUser);
-      return this.buildUserRO(savedUser);
+      console.log(8)
+      return this.buildDataRO(await this.repository.save(newUser))
     }
   }
 
-  async update(id: number, dto: UpdateUserDto): Promise<any> {
-    // const toUpdate = await this.userRepository.findOne(id);
-    // delete toUpdate.password;
-    // delete toUpdate.favorites;
-    // const updated = Object.assign(toUpdate, dto);
-    // return await this.userRepository.save(updated);
+  async update(dto: UpdateDto): Promise<any> {
+    const currentData = await this.repository.findOneBy({ _id: dto._id });
+    if (currentData) {
+      return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
+    }
+    return null
   }
 
-  async delete(email: string): Promise<DeleteResult> {
-    return await this.userRepository.delete({ email: email });
+  async delete(id: string): Promise<DeleteResult> {
+    return await this.repository.delete({ _id: id });
   }
 
-  async findById(id: number): Promise<any> {
-    // const user = await this.userRepository.findOne(id);
+  async findById(id: string): Promise<any> {
+    const data = await this.repository.findOneBy({ _id: id });
 
-    // if (!user) {
-    //   const errors = { User: ' not found' };
-    //   throw new HttpException({ errors }, 401);
-    // }
+    if (!data) {
+      const errors = { error: 'NOT_FOUND' };
+      throw new HttpException({ errors }, 401);
+    }
 
-    // return this.buildUserRO(user);
+    return this.buildDataRO(data);
   }
 // Promise<UserRO>
-  async findByEmail(email: string): Promise<any> {
-    // const user = await this.userRepository.findOne({ email: email });
-    // return this.buildUserRO(user);
+  async findByEmail(email: any): Promise<any> {
+    const data = await this.repository.findOne(email);
+    if (data) {
+      return this.buildDataRO(data);
+    }
   }
 
-  public generateJWT(user) {
+  public generateJWT(data) {
     const today = new Date();
     const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
 
     return jwt.sign(
       {
-        id: user.id,
-        username: user.username,
-        email: user.email,
+        id: data.id,
+        password: data.password,
+        email: data.email,
         exp: exp.getTime() / 1000,
       },
       SECRET,
     );
   }
 
-  private buildUserRO(user: UserEntity) {
-    const userRO = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      bio: user.bio,
-      token: this.generateJWT(user),
-      image: user.image,
+  private buildDataRO(entity: UserEntity): any {
+    const data = {
+      id: entity._id,
+      email: entity.email,
+      password: entity.password,
+      token: this.generateJWT(entity),
+      organization: entity.organization,
+      portfolioIds: entity.portfolioIds,
+      projectIds: entity.projectIds,
     };
 
-    return { user: userRO };
+    return { data };
   }
 }

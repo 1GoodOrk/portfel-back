@@ -1,47 +1,42 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  ObjectIdColumn,
   Column,
   BeforeInsert,
-  // JoinTable,
-  // ManyToMany,
-  // OneToMany,
+  OneToMany
 } from 'typeorm';
 import { IsEmail } from 'class-validator';
 import * as argon2 from 'argon2';
-// import { ArticleEntity } from '../article/article.entity';
+import { ProjectEntity } from '../project/project.entity';
+import { PortfolioEntity } from '../portfolio/portfolio.entity';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  username: string;
+  @ObjectIdColumn()
+  _id: string;
 
   @Column()
   @IsEmail()
   email: string;
 
-  @Column({ default: '' })
-  bio: string;
+  @Column()
+  organization: string;
 
-  @Column({ default: '' })
-  image: string;
+  @Column()
+  token: string;
 
   @Column()
   password: string;
-  articles: never[];
 
   @BeforeInsert()
   async hashPassword() {
     this.password = await argon2.hash(this.password);
   }
 
-  // @ManyToMany((type: any) => ArticleEntity)
-  // @JoinTable()
-  // favorites: ArticleEntity[];
+  @OneToMany((type) => PortfolioEntity, (data) => data.id)
+  portfolioIds: Array<PortfolioEntity>;
 
-  // @OneToMany((type) => ArticleEntity, (article) => article.author)
-  // articles: ArticleEntity[];
+  @OneToMany((type) => ProjectEntity, (data) => data.id)
+  projectIds: Array<ProjectEntity>;
 }
