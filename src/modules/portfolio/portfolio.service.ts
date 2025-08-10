@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository, DeleteResult } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { PortfolioEntity } from './portfolio.entity';
 import { CreateDto, UpdateDto } from './dto';
-const jwt = require('jsonwebtoken');
-import { SECRET } from '../../config';
-import { PortfolioRO, PortfolioDataRO } from './portfolio.interface';
+import { PortfolioDataRO, PortfolioData } from './portfolio.interface';
 import { validate } from 'class-validator';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
-import * as argon2 from 'argon2';
+import { v6 } from 'uuid';
 
 @Injectable()
 export class PortfolioService {
@@ -18,37 +16,54 @@ export class PortfolioService {
     private readonly repository: Repository<PortfolioEntity>,
   ) {}
 
-  // Promise<Array<UserEntity>>
-  async findAll(): Promise<any> {
-    return await this.repository.find();
+  async findAll(): Promise<Array<PortfolioDataRO>> {
+    return await this.repository
+      .find()
+      .then(data => data.map((el: PortfolioEntity) => this.buildDataRO(el)));
   }
 
-  async create(dto: CreateDto): Promise<any> {
-    // check uniqueness of username/email
-    // const { username, email, password } = dto;
-    // const qb = await getRepository(UserEntity)
-    //   .createQueryBuilder('user')
-    //   .where('user.username = :username', { username })
-    //   .orWhere('user.email = :email', { email });
+  async findById(id: string): Promise<PortfolioDataRO> {
+    const data = await this.repository.findOneBy({ _id: id });
 
-    // const user = await qb.getOne();
+    if (!data) {
+      const errors = { data: 'NOT_FOUND' };
+      throw new HttpException({ errors }, 401);
+    }
 
-    // if (user) {
-    //   const errors = { username: 'Username and email must be unique.' };
-    //   throw new HttpException(
-    //     { message: 'Input data validation failed', errors },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
+    return this.buildDataRO(data);
+  }
+  async create(dto: CreateDto): Promise<PortfolioDataRO> {
+    const data = await this.repository.findOneBy({ name: dto.name, subinfo: dto.subinfo });
 
-    // // create new user
-    // const newUser = new UserEntity();
-    // newUser.username = username;
-    // newUser.email = email;
-    // newUser.password = password;
-    // newUser.articles = [];
+    if (data) {
+      const errors = { data: 'DATA_ALREADY_EXSIST' };
+      throw new HttpException(
+        { message: 'Input data validation failed', errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    // const errors = await validate(newUser);
+    const newEntity = new PortfolioEntity();
+    newEntity._id = v6();
+    newEntity.name = dto.name;
+    newEntity.img = dto.img;
+    newEntity.des = dto.des;
+    newEntity.projects = dto.projects;
+    newEntity.projectIds = dto.projectIds;
+    newEntity.subinfo = dto.subinfo;
+    newEntity.budget = dto.budget;
+    newEntity.duration = dto.duration;
+    newEntity.location = dto.location;
+    if (newEntity.location === 'OUTSIDE') {
+      newEntity.town = dto.town;
+    }
+    newEntity.optionEco = dto.options.eco;
+    newEntity.optionWar = dto.options.war;
+    newEntity.optionLog = dto.options.log;
+    newEntity.optionDoc = dto.options.doc;
+    newEntity.optionStruc = dto.options.struc;
+
+    // const errors = await validate(newEntity);
     // if (errors.length > 0) {
     //   const _errors = { username: 'Userinput is not valid.' };
     //   throw new HttpException(
@@ -56,40 +71,26 @@ export class PortfolioService {
     //     HttpStatus.BAD_REQUEST,
     //   );
     // } else {
-    //   const savedUser = await this.userRepository.save(newUser);
-    //   return this.buildUserRO(savedUser);
+    //   return this.buildDataRO(await this.repository.save(newEntity));
     // }
+    return this.buildDataRO(await this.repository.save(newEntity));
   }
 
-  async update(id: any, dto: UpdateDto): Promise<any> {
-    const entity = await this.repository.findOne(id);
-    if (entity) {
-      Object.keys(dto).forEach((key: string) => {
-        entity[key] = dto[key]
-      })
-      return await this.repository.save(Object.assign(entity, dto));
+  async update(id: string, dto: UpdateDto): Promise<UpdateResult | null> {
+    const currentData = await this.repository.findOneBy({ _id: dto._id });
+    if (currentData) {
+      return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
     }
     return null
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    return await this.repository.delete(id);
+    return await this.repository.delete({ _id: id });
   }
 
-  async findById(id: any): Promise<any> {
-    const data = await this.repository.findOne(id);
-
-    if (!data) {
-      const errors = { Data: ' not found' };
-      throw new HttpException({ errors }, 401);
-    }
-
-    return this.buildDataRO(data);
-  }
-
-  private buildDataRO(entity: PortfolioEntity): any {
-    const data = {
-      id: entity.id,
+  private buildDataRO(entity: PortfolioEntity): PortfolioDataRO {
+    return {
+      _id: entity._id,
       name: entity.name,
       img: entity.img,
       des: entity.des,
@@ -108,7 +109,5 @@ export class PortfolioService {
         struc: entity.optionStruc,
       }
     };
-
-    return { data };
   }
 }

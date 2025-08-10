@@ -1,13 +1,13 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  ObjectIdColumn,
   Column,
 } from 'typeorm';
 
 @Entity('project')
 export class ProjectEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ObjectIdColumn()
+  _id: string;
 
   @Column()
   name: string;

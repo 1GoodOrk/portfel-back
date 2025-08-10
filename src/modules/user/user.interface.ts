@@ -1,9 +1,9 @@
 export interface UserData {
-  id: string;
+  _id: string;
   email: string;
   token: string;
-  portfolioIds: string;
-  projectIds: string;
+  portfolioIds: Array<string>;
+  projectIds: Array<string>;
 }
 
 export interface UserRO {

@@ -27,9 +27,7 @@ export class CreateDto {
 
   @IsNotEmpty()
   readonly location: string;
-
-  @IsNotEmpty()
-  readonly town: string;
+  readonly town?: string;
 
   @IsNotEmpty()
   readonly options: {

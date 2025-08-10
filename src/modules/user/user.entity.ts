@@ -34,9 +34,15 @@ export class UserEntity {
     this.password = await argon2.hash(this.password);
   }
 
-  @OneToMany((type) => PortfolioEntity, (data) => data.id)
-  portfolioIds: Array<PortfolioEntity>;
+  @Column()
+  portfolioIds: Array<string>;
+  // TODO: check if it is too many resources takes
+  // @OneToMany((type) => PortfolioEntity, (data) => data._id)
+  // portfolioIds: Array<PortfolioEntity>;
 
-  @OneToMany((type) => ProjectEntity, (data) => data.id)
-  projectIds: Array<ProjectEntity>;
+  @Column()
+  projectIds: Array<string>;
+  // TODO: check if it is too many resources takes
+  // @OneToMany((type) => ProjectEntity, (data) => data._id)
+  // projectIds: Array<ProjectEntity>;
 }

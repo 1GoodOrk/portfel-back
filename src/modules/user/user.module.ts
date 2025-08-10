@@ -5,6 +5,8 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { AuthMiddleware } from './auth.middleware';
 
+import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
   providers: [UserService],
@@ -16,7 +18,13 @@ import { AuthMiddleware } from './auth.middleware';
 export class UserModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
     consumer
+      .apply(LoggerMiddleware)
+      .forRoutes(UserController)
+    consumer
       .apply(AuthMiddleware)
-      .forRoutes({path: 'user', method: RequestMethod.GET}, {path: 'user', method: RequestMethod.PUT});
+      .forRoutes(
+        { path: 'login', method: RequestMethod.GET }, 
+        // { path: 'user', method: RequestMethod.PUT }
+      );
   }
 }

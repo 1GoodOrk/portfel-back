@@ -7,13 +7,14 @@ import {
   Param,
   Controller,
   UsePipes,
+  Req,
 } from '@nestjs/common';
-// import { Request } from 'express';
+import type { Request } from 'express';
 import { UserService } from './user.service';
 import { UserRO } from './user.interface';
 import { CreateDto, UpdateDto, LoginDto } from './dto';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
-import { User } from './user.decorator';
+// import { User } from './user.decorator';
 import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -25,31 +26,26 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('users/:id')
-  async findMe(@Param() params): Promise<any> {
+  async findMe(@Param() params): Promise<UserRO> {
     return await this.userService.findById(params.id);
   }
 
-  @Get('user/email')
-  async loginEmail(@User('email') email: string): Promise<any> {
-    return await this.userService.findByEmail(email);
-  }
-
   @Get('users')
-  async findAll(): Promise<any> {
+  async findAll(): Promise<Array<any>> {
     return await this.userService.findAll();
   }
-  // Promise<UserRO>
+
   @Put('users')
   async update(
     // @User('_id') _id: string,
     @Body('data') data: UpdateDto,
-  ): Promise<any> {
+  ): Promise<UserRO> {
     return await this.userService.update(data);
   }
 
   // @UsePipes(new ValidationPipe())
   @Post('users')
-  async create(@Body('data') data: CreateDto): Promise<any> {
+  async create(@Body('data') data: CreateDto): Promise<UserRO> {
     return this.userService.create(data);
   }
 
@@ -58,21 +54,20 @@ export class UserController {
     return await this.userService.delete(params.id);
   }
 
-  @UsePipes(new ValidationPipe())
-  @Post('users/login')
-  async login(@Body('user') loginUserDto: LoginDto): Promise<UserRO> {
-    const _data = await this.userService.findOne(loginUserDto);
+  // @UsePipes(new ValidationPipe())
+  @Get('login')
+  async login(@Req() req: Request): Promise<any> {
 
-    if (!_data) {
-      const errors = { User: ' not found' };
+    if (!req.body) {
+      const errors = { message: 'NOT_FOUND' };
       throw new HttpException({ errors }, 401);
     }
 
-    const { id, email, portfolioIds, projectIds } = _data;
+    const { id, email, portfolioIds, projectIds } = req.body;
     const data = { 
       id, 
       email, 
-      token: await this.userService.generateJWT(_data), 
+      token: await this.userService.generateJWT(req.body), 
       portfolioIds, 
       projectIds 
     };

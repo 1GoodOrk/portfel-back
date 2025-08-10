@@ -1,5 +1,5 @@
 export interface PortfolioData {
-  id: string;
+  _id: string;
   name: string;
   img: string;
   des: string;
@@ -9,7 +9,7 @@ export interface PortfolioData {
   budget: number;
   duration: number;
   location: string;
-  town: string;
+  town?: string;
   optionEco: number;
   optionWar: number;
   optionLog: number;
@@ -18,7 +18,7 @@ export interface PortfolioData {
 }
 
 export interface PortfolioDataRO {
-  id: string;
+  _id: string;
   name: string;
   img: string;
   des: string;
@@ -28,7 +28,7 @@ export interface PortfolioDataRO {
   budget: number;
   duration: number;
   location: string;
-  town: string;
+  town?: string;
   options: {
     eco: number;
     war: number;

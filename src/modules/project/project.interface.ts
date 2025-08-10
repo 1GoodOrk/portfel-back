@@ -1,5 +1,5 @@
 export interface ProjectData {
-  id: string;
+  _id: string;
   name: string;
   subinfo: string;
   budget: number;
@@ -7,7 +7,7 @@ export interface ProjectData {
   road: number;
   mainRoad: boolean;
   inTown: boolean;
-  town: string;
+  town?: string;
   addressStart: string;
   addressEnd: string;
   des: string;

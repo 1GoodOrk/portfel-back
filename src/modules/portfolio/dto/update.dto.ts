@@ -1,5 +1,5 @@
 export class UpdateDto {
-  readonly id: string;
+  readonly _id: string;
   readonly name: string;
   readonly img: string;
   readonly des: string;
@@ -9,7 +9,7 @@ export class UpdateDto {
   readonly budget: number;
   readonly duration: number;
   readonly location: string;
-  readonly town: string;
+  readonly town?: string;
   readonly options: {
     eco: number;
     war: number;

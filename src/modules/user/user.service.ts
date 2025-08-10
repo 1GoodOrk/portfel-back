@@ -20,65 +20,48 @@ export class UserService {
   ) {}
 
   // Promise<Array<UserEntity>>
-  async findAll(): Promise<any> {
-    return await this.repository.find();
+  async findAll(): Promise<Array<any>> {
+    return await this.repository
+      .find()
+      .then(data => data.map((el: UserEntity) => this.buildDataRO(el)));
   }
-// Promise<UserEntity> | null
-  async findOne({ email, password }: LoginDto): Promise<any> {
-    // const user = await this.userRepository.findOne({ email: email });
-    // if (!user) {
-    //   return null;
-    // }
 
-    // if (await argon2.verify(user.password, password)) {
-    //   return user;
-    // }
-
-    // return null;
+  private async findByMail(email: string): Promise<UserEntity | null> {
+    const user = await this.repository.findOneBy({ email });
+    if (!user) {
+      return null;
+    }
+    return user;
   }
 
   async create(dto: CreateDto): Promise<any> {
-    console.log(1)
-    // check uniqueness of username/email
     const { organization, email, password } = dto;
-    console.log(2, organization, email, password)
-    // const qb = await getRepository(UserEntity)
-    //   .createQueryBuilder('user')
-    //   .orWhere('user.email = :email', { email });
-    // console.log(3)
 
-    // const data = await qb.getOne();
-    // console.log(4, data)
+    const user = await this.findByMail(email)
+    if (user) {
+      const errors = { email: 'ALREADY_EXISTS' };
+      throw new HttpException(
+        { message: 'Input data validation failed', errors },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    // if (data) {
-    //   const errors = { email: 'Username and email must be unique.' };
-    //   throw new HttpException(
-    //     { message: 'Input data validation failed', errors },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
-
-    console.log(5)
     const newUser = new UserEntity();
     newUser._id = v6()
     newUser.organization = organization;
     newUser.email = email;
     newUser.password = password;
-    newUser.token = this.generateJWT(newUser);
     newUser.projectIds = [];
     newUser.portfolioIds = [];
-    console.log(6, newUser)
 
     const errors = await validate(newUser);
     if (errors.length > 0) {
-      console.log(7, errors)
-      const _errors = { USER: 'USER_NOT_VALID' };
+      const _errors = { user: 'USER_DATA_NOT_VALID' };
       throw new HttpException(
         { message: 'Input data validation failed', _errors },
         HttpStatus.BAD_REQUEST,
       );
     } else {
-      console.log(8)
       return this.buildDataRO(await this.repository.save(newUser))
     }
   }
@@ -120,7 +103,7 @@ export class UserService {
 
     return jwt.sign(
       {
-        id: data.id,
+        id: data._id,
         password: data.password,
         email: data.email,
         exp: exp.getTime() / 1000,
@@ -131,7 +114,7 @@ export class UserService {
 
   private buildDataRO(entity: UserEntity): any {
     const data = {
-      id: entity._id,
+      _id: entity._id,
       email: entity.email,
       password: entity.password,
       token: this.generateJWT(entity),
@@ -140,6 +123,6 @@ export class UserService {
       projectIds: entity.projectIds,
     };
 
-    return { data };
+    return data;
   }
 }

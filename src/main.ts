@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
+import { AppModule } from './app.module';
+import { WinstonLogger } from '@port/services/winston.logger';
 
 async function bootstrap() {
   const appOptions = { cors: true };
@@ -17,5 +19,9 @@ async function bootstrap() {
   SwaggerModule.setup('/docs', app, document);
 
   await app.listen(27182);
+
+  const logger = new WinstonLogger(); 
+  const appUrl = await app.getUrl();
+  logger.info(`Start. Application is running on: ${appUrl}`);
 }
 bootstrap();

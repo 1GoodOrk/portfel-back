@@ -1,6 +1,6 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
+  ObjectIdColumn,
   Column,
   OneToMany,
 } from 'typeorm';
@@ -8,8 +8,8 @@ import { ProjectEntity } from '../project/project.entity';
 
 @Entity('porfolio')
 export class PortfolioEntity {
-  @PrimaryGeneratedColumn()
-  id: string;
+  @ObjectIdColumn()
+  _id: string;
   
   @Column()
   name: string;
@@ -23,11 +23,14 @@ export class PortfolioEntity {
   @Column()
   projects: number;
   
-  @OneToMany((type) => ProjectEntity, (article) => article.id)
-  projectIds: Array<ProjectEntity>;
+  @Column()
+  projectIds: Array<string>;
+  // TODO: check if it is too many resources takes
+  // @OneToMany((type) => ProjectEntity, (article) => article._id)
+  // projectIds: Array<ProjectEntity>;
 
   @Column()
-  subinfo: number;
+  subinfo: string;
   
   @Column()
   budget: number;
@@ -39,7 +42,7 @@ export class PortfolioEntity {
   location: string;
   
   @Column()
-  town: string;
+  town?: string;
 
   @Column()
   optionEco: number;
