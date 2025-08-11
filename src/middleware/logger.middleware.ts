@@ -6,7 +6,7 @@ import { WinstonLogger } from '@port/services/winston.logger';
 export class LoggerMiddleware implements NestMiddleware {
   private readonly logger = new WinstonLogger();
   use(req: Request, res: Response, next: NextFunction) {
-    this.logger.debug(`Request url: ${req.url}`)
+    this.logger.debug(`Request url: ${req.url}, method: ${req.method}`)
     next();
   }
 }
