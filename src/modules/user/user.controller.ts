@@ -20,7 +20,7 @@ import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()
-@ApiTags('user')
+@ApiTags('User')
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}

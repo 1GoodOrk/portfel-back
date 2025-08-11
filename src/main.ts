@@ -9,9 +9,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, appOptions);
   app.setGlobalPrefix('api');
   const options = new DocumentBuilder()
-    .setTitle('NestJS Realworld Example App')
-    .setDescription('The Realworld API description')
-    .setVersion('1.0')
+    .setTitle('Portfolio Server Side')
+    .setDescription('Main routes for portfolio system')
+    .setVersion('1.1')
     .setBasePath('api')
     .addBearerAuth()
     .build();

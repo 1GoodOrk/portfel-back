@@ -18,7 +18,7 @@ import { ValidationPipe } from '../../shared/pipes/validation.pipe';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()
-@ApiTags('portfolio')
+@ApiTags('Portfolio')
 @Controller()
 export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
