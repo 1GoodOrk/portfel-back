@@ -52,6 +52,7 @@ export class PortfolioService {
     newEntity.projectIds = dto.projectIds;
     newEntity.subinfo = dto.subinfo;
     newEntity.budget = dto.budget;
+    newEntity.profit = dto.profit;
     newEntity.duration = dto.duration;
     newEntity.location = dto.location;
     if (newEntity.location === 'OUTSIDE') {
@@ -98,6 +99,7 @@ export class PortfolioService {
       projectIds: entity.projectIds,
       subinfo: entity.subinfo,
       budget: entity.budget,
+      profit: entity.profit,
       duration: entity.duration,
       location: entity.location,
       town: entity.town,

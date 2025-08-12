@@ -14,15 +14,30 @@ export class ProjectEntity {
   
   @Column()
   subinfo: string;
+
+  @Column()
+  type: string;
   
   @Column()
   budget: number;
-  
+
   @Column()
-  duration: number;
+  budgetSource: number;
+
+  @Column()
+  profit: number;
+
+  @Column()
+  processDuration: number;
   
   @Column()
   road: number;
+
+  @Column()
+  traffic: number;
+
+  @Column()
+  distance: number;
 
   @Column()
   mainRoad: boolean;
@@ -44,4 +59,37 @@ export class ProjectEntity {
 
   @Column()
   img: string;
+
+  @Column()
+  portfolioId: string;
+
+  @Column()
+  dateCreation: string;
+
+  @Column()
+  dateInitialization: string;
+
+  @Column()
+  permissionDuration: string;
+
+  @Column()
+  score: number;
+
+  @Column()
+  priority: number;
+
+  @Column()
+  optionEco: number;
+
+  @Column()
+  optionWar: number;
+
+  @Column()
+  optionLog: number;
+
+  @Column()
+  optionDoc: number;
+
+  @Column()
+  optionStruc: number;
 }

@@ -23,6 +23,9 @@ export class CreateDto {
   readonly budget: number;
 
   @IsNotEmpty()
+  readonly profit: number;
+
+  @IsNotEmpty()
   readonly duration: number;
 
   @IsNotEmpty()

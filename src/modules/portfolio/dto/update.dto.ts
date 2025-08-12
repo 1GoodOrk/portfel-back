@@ -7,6 +7,7 @@ export class UpdateDto {
   readonly projectIds: Array<string>;
   readonly subinfo: string;
   readonly budget: number;
+  readonly profit: number;
   readonly duration: number;
   readonly location: string;
   readonly town?: string;

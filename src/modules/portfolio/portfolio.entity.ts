@@ -34,6 +34,9 @@ export class PortfolioEntity {
   
   @Column()
   budget: number;
+
+  @Column()
+  profit: number;
   
   @Column()
   duration: number;

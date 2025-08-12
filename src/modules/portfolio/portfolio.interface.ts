@@ -7,6 +7,7 @@ export interface PortfolioData {
   projectIds: Array<string>;
   subinfo: string;
   budget: number;
+  profit: number;
   duration: number;
   location: string;
   town?: string;
@@ -26,6 +27,7 @@ export interface PortfolioDataRO {
   projectIds: Array<string>;
   subinfo: string;
   budget: number;
+  profit: number;
   duration: number;
   location: string;
   town?: string;
