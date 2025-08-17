@@ -6,9 +6,14 @@ import { PortfolioService } from './portfolio.service';
 
 import { LoggerMiddleware } from '@port/middleware/logger.middleware';
 
+import { ProjectService } from '../project/project.service';
+import { ProjectEntity } from '../project/project.entity';
+import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/user.entity';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([PortfolioEntity])],
-  providers: [PortfolioService],
+  imports: [TypeOrmModule.forFeature([PortfolioEntity, UserEntity, ProjectEntity])],
+  providers: [PortfolioService, ProjectService, UserService],
   controllers: [
     PortfolioController
   ],

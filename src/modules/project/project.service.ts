@@ -28,7 +28,9 @@ export class ProjectService {
       for (let i = 0; i < user.projectIds.length; i++) {
         // await this.repository.findOneBy({ _id: user.projectIds[i] });
         const found: any = await this.repository.findOneBy({ _id: user.projectIds[i] })
-        result.push(this.buildDataRO(found))
+        if (found) {
+          result.push(this.buildDataRO(found))
+        }
       }
       return result
     }
@@ -123,8 +125,8 @@ export class ProjectService {
       const decoded: any = jwt.verify(token, SECRET);
       const user = await this.userService.findByEmail(decoded.email);
       const index = user.projectIds.indexOf(id);
-      if (index > -1) { // only splice array when item is found
-        user.projectIds.splice(index, 1); // 2nd parameter means remove one item only
+      if (index > -1) { 
+        user.projectIds.splice(index, 1);
       }
       await this.userService.update(user);
     }

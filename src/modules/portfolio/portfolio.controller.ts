@@ -5,6 +5,7 @@ import {
   Put,
   Delete,
   Param,
+  Query,
   Controller,
   UsePipes,
 } from '@nestjs/common';
@@ -29,14 +30,17 @@ export class PortfolioController {
   }
 
   @Get('portfolios')
-  async findAll(): Promise<any> {
-    return await this.portfolioService.findAll();
+  async findAll(@Query() query): Promise<any> {
+    return await this.portfolioService.findAll(query.token);
   }
 
   // @UsePipes(new ValidationPipe())
   @Post('portfolios')
-  async create(@Body('data') data: CreateDto): Promise<any> {
-    return this.portfolioService.create(data);
+  async create(
+    @Body('data') data: CreateDto,
+    @Query() query
+  ): Promise<any> {
+    return this.portfolioService.create(data, query.token);
   }
 
   // @UsePipes(new ValidationPipe())
@@ -49,7 +53,7 @@ export class PortfolioController {
   }
 
   @Delete('portfolios/:id')
-  async delete(@Param() params): Promise<any> {
-    return await this.portfolioService.delete(params.id);
+  async delete(@Param() params, @Query() query): Promise<any> {
+    return await this.portfolioService.delete(params.id, query.token);
   }
 }

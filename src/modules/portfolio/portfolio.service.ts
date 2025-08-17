@@ -8,15 +8,31 @@ import { validate } from 'class-validator';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
 import { v6 } from 'uuid';
+import * as jwt from 'jsonwebtoken';
+import { SECRET } from '@port/config';
+import { UserService } from '../user/user.service';
+import { ProjectService } from '../project/project.service';
 
 @Injectable()
 export class PortfolioService {
   constructor(
     @InjectRepository(PortfolioEntity)
     private readonly repository: Repository<PortfolioEntity>,
+    private readonly userService: UserService,
+    private readonly projectService: ProjectService
   ) {}
 
-  async findAll(): Promise<Array<PortfolioDataRO>> {
+  async findAll(token?: string): Promise<Array<PortfolioDataRO>> {
+    if (token) {
+      const decoded: any = jwt.verify(token, SECRET);
+      const user = await this.userService.findByEmail(decoded.email);
+      const result: any = []
+      for (let i = 0; i < user.portfolioIds.length; i++) {
+        const found: any = await this.repository.findOneBy({ _id: user.portfolioIds[i] })
+        result.push(this.buildDataRO(found))
+      }
+      return result
+    }
     return await this.repository
       .find()
       .then(data => data.map((el: PortfolioEntity) => this.buildDataRO(el)));
@@ -32,7 +48,7 @@ export class PortfolioService {
 
     return this.buildDataRO(data);
   }
-  async create(dto: CreateDto): Promise<PortfolioDataRO> {
+  async create(dto: CreateDto, token: string): Promise<PortfolioDataRO> {
     const data = await this.repository.findOneBy({ name: dto.name, subinfo: dto.subinfo });
 
     if (data) {
@@ -74,7 +90,12 @@ export class PortfolioService {
     // } else {
     //   return this.buildDataRO(await this.repository.save(newEntity));
     // }
-    return this.buildDataRO(await this.repository.save(newEntity));
+    const saveNewEntity = await this.repository.save(newEntity)
+    const decoded: any = jwt.verify(token, SECRET);
+    const user = await this.userService.findByEmail(decoded.email);
+    user.portfolioIds.push(newEntity._id)
+    await this.userService.update(user);
+    return this.buildDataRO(saveNewEntity);
   }
 
   async update(id: string, dto: UpdateDto): Promise<UpdateResult | null> {
@@ -85,8 +106,18 @@ export class PortfolioService {
     return null
   }
 
-  async delete(id: string): Promise<DeleteResult> {
-    return await this.repository.delete({ _id: id });
+  async delete(id: string, token: string): Promise<DeleteResult> {
+    const result = await this.repository.delete({ _id: id });
+    if (token) {
+      const decoded: any = jwt.verify(token, SECRET);
+      const user = await this.userService.findByEmail(decoded.email);
+      const index = user.projectIds.indexOf(id);
+      if (index > -1) { 
+        user.projectIds.splice(index, 1);
+      }
+      await this.userService.update(user);
+    }
+    return result
   }
 
   private buildDataRO(entity: PortfolioEntity): PortfolioDataRO {
