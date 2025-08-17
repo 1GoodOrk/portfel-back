@@ -4,7 +4,11 @@ export interface PortfolioData {
   img: string;
   des: string;
   projects: number;
-  projectIds: Array<string>;
+  projectIds: {
+    tierI: Array<string>;
+    tierII: Array<string>;
+    tierIII: Array<string>;
+  };
   subinfo: string;
   budget: number;
   profit: number;
@@ -14,7 +18,7 @@ export interface PortfolioData {
   optionEco: number;
   optionWar: number;
   optionLog: number;
-  optionDoc: number;
+  optionSoc: number;
   optionStruc: number;
 }
 
@@ -24,7 +28,11 @@ export interface PortfolioDataRO {
   img: string;
   des: string;
   projects: number;
-  projectIds: Array<string>;
+  projectIds: {
+    tierI: Array<string>;
+    tierII: Array<string>;
+    tierIII: Array<string>;
+  };
   subinfo: string;
   budget: number;
   profit: number;
@@ -35,7 +43,7 @@ export interface PortfolioDataRO {
     eco: number;
     war: number;
     log: number;
-    doc: number;
+    soc: number;
     struc: number;
   }
 }

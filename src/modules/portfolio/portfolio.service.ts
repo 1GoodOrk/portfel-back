@@ -61,7 +61,7 @@ export class PortfolioService {
     newEntity.optionEco = dto.options.eco;
     newEntity.optionWar = dto.options.war;
     newEntity.optionLog = dto.options.log;
-    newEntity.optionDoc = dto.options.doc;
+    newEntity.optionSoc = dto.options.soc;
     newEntity.optionStruc = dto.options.struc;
 
     // const errors = await validate(newEntity);
@@ -107,7 +107,7 @@ export class PortfolioService {
         eco: entity.optionEco,
         war: entity.optionWar,
         log: entity.optionLog,
-        doc: entity.optionDoc,
+        soc: entity.optionSoc,
         struc: entity.optionStruc,
       }
     };

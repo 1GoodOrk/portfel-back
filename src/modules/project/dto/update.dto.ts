@@ -3,9 +3,11 @@ export class UpdateDto {
   readonly name: string;
   readonly subinfo: string;
   readonly type: string;
-  readonly budgetSource: number;
-  readonly processDuration: number;
+  readonly budget: number;
+  readonly budgetSource: string;
+  readonly processDuration: number;  
   readonly profit: number;
+  readonly traffic: number;
   readonly road: number;
   readonly distance: number;
   readonly mainRoad: boolean;
@@ -15,17 +17,20 @@ export class UpdateDto {
   readonly addressEnd: string;
   readonly des: string;
   readonly img: string;
-  readonly portfolioId: string;
+  readonly portfolioId?: {
+    tier: number;
+    _id: string;
+  };
   readonly dateCreation: string;
   readonly dateInitialization: string;
-  readonly permissionDuration: string;
+  readonly permissionDuration: number;
   readonly score: number;
   readonly priority: number;
   readonly options: {
     eco: number;
     war: number;
     log: number;
-    doc: number;
+    soc: number;
     struc: number;
   };
 }

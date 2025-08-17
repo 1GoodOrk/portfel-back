@@ -47,10 +47,11 @@ export class ProjectService {
     newEntity.name = dto.name;
     newEntity.subinfo = dto.subinfo;
     newEntity.type = dto.type;
+    newEntity.budget = dto.budget;
     newEntity.budgetSource = dto.budgetSource;
     newEntity.processDuration = dto.processDuration;
     newEntity.profit = dto.profit;
-    newEntity.processDuration = dto.processDuration;
+    newEntity.traffic = dto.traffic;
     newEntity.road = dto.road;
     newEntity.distance = dto.distance;
     newEntity.mainRoad = dto.mainRoad;
@@ -71,7 +72,7 @@ export class ProjectService {
     newEntity.optionEco = dto.options.eco;
     newEntity.optionWar = dto.options.war;
     newEntity.optionLog = dto.options.log;
-    newEntity.optionDoc = dto.options.doc;
+    newEntity.optionSoc = dto.options.soc;
     newEntity.optionStruc = dto.options.struc;
 
     // TODO: error for validation => check functionality
@@ -106,9 +107,11 @@ export class ProjectService {
       name: entity.name,
       subinfo: entity.subinfo,
       type: entity.type,
+      budget: entity.budget,
       budgetSource: entity.budgetSource,
       processDuration: entity.processDuration,
       profit: entity.profit,
+      traffic: entity.traffic,
       road: entity.road,
       distance: entity.distance,
       mainRoad: entity.mainRoad,
@@ -128,7 +131,7 @@ export class ProjectService {
         eco: entity.optionEco,
         war: entity.optionWar,
         log: entity.optionLog,
-        doc: entity.optionDoc,
+        soc: entity.optionSoc,
         struc: entity.optionStruc,
       }
     };

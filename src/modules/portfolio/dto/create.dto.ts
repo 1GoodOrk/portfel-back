@@ -14,7 +14,11 @@ export class CreateDto {
   readonly projects: number;
 
   @IsNotEmpty()
-  readonly projectIds: Array<string>;
+  readonly projectIds: {
+    tierI: Array<string>;
+    tierII: Array<string>;
+    tierIII: Array<string>;
+  };
 
   @IsNotEmpty()
   readonly subinfo: string;
@@ -37,7 +41,7 @@ export class CreateDto {
     eco: number;
     war: number;
     log: number;
-    doc: number;
+    soc: number;
     struc: number;
   }
 }

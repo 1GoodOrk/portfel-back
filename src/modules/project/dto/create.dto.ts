@@ -11,13 +11,19 @@ export class CreateDto {
   readonly type: string;
 
   @IsNotEmpty()
-  readonly budgetSource: number;
+  readonly budget: number;
+
+  @IsNotEmpty()
+  readonly budgetSource: string;
 
   @IsNotEmpty()
   readonly processDuration: number;
 
   @IsNotEmpty()
   readonly profit: number;
+
+  @IsNotEmpty()
+  readonly traffic: number;
 
   @IsNotEmpty()
   readonly road: number;
@@ -47,7 +53,10 @@ export class CreateDto {
   readonly img: string;
 
   @IsNotEmpty()
-  readonly portfolioId: string;
+  readonly portfolioId?: {
+    tier: number;
+    _id: string;
+  };
 
   @IsNotEmpty()
   readonly dateCreation: string;
@@ -56,7 +65,7 @@ export class CreateDto {
   readonly dateInitialization: string;
 
   @IsNotEmpty()
-  readonly permissionDuration: string;
+  readonly permissionDuration: number;
 
   @IsNotEmpty()
   readonly score: number;
@@ -69,7 +78,7 @@ export class CreateDto {
     eco: number;
     war: number;
     log: number;
-    doc: number;
+    soc: number;
     struc: number;
   }
 }

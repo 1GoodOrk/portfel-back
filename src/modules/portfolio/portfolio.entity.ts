@@ -24,7 +24,11 @@ export class PortfolioEntity {
   projects: number;
   
   @Column()
-  projectIds: Array<string>;
+  projectIds: {
+    tierI: Array<string>;
+    tierII: Array<string>;
+    tierIII: Array<string>;
+  };
   // TODO: check if it is too many resources takes
   // @OneToMany((type) => ProjectEntity, (article) => article._id)
   // projectIds: Array<ProjectEntity>;
@@ -57,7 +61,7 @@ export class PortfolioEntity {
   optionLog: number;
 
   @Column()
-  optionDoc: number;
+  optionSoc: number;
 
   @Column()
   optionStruc: number;

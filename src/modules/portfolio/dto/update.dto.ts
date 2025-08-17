@@ -4,7 +4,11 @@ export class UpdateDto {
   readonly img: string;
   readonly des: string;
   readonly projects: number;
-  readonly projectIds: Array<string>;
+  readonly projectIds: {
+    tierI: Array<string>;
+    tierII: Array<string>;
+    tierIII: Array<string>;
+  };
   readonly subinfo: string;
   readonly budget: number;
   readonly profit: number;
@@ -15,7 +19,7 @@ export class UpdateDto {
     eco: number;
     war: number;
     log: number;
-    doc: number;
+    soc: number;
     struc: number;
   }
 }

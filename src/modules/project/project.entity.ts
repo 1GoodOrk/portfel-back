@@ -22,7 +22,7 @@ export class ProjectEntity {
   budget: number;
 
   @Column()
-  budgetSource: number;
+  budgetSource: string;
 
   @Column()
   profit: number;
@@ -61,7 +61,10 @@ export class ProjectEntity {
   img: string;
 
   @Column()
-  portfolioId: string;
+  portfolioId?: {
+    tier: number;
+    _id: string;
+  };
 
   @Column()
   dateCreation: string;
@@ -70,7 +73,7 @@ export class ProjectEntity {
   dateInitialization: string;
 
   @Column()
-  permissionDuration: string;
+  permissionDuration: number;
 
   @Column()
   score: number;
@@ -88,7 +91,7 @@ export class ProjectEntity {
   optionLog: number;
 
   @Column()
-  optionDoc: number;
+  optionSoc: number;
 
   @Column()
   optionStruc: number;
