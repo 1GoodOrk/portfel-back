@@ -1,5 +1,5 @@
 export class UpdateDto {
-  readonly id: string;
+  readonly _id: string;
   readonly name: string;
   readonly subinfo: string;
   readonly type: string;

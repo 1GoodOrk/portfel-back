@@ -8,15 +8,30 @@ import { validate } from 'class-validator';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
 import { v6 } from 'uuid';
+import * as jwt from 'jsonwebtoken';
+import { SECRET } from '@port/config';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     @InjectRepository(ProjectEntity)
     private readonly repository: Repository<ProjectEntity>,
+    private readonly userService: UserService
   ) {}
 
-  async findAll(): Promise<Array<ProjectData>> {
+  async findAll(token?: string): Promise<Array<ProjectData>> {
+    if (token) {
+      const decoded: any = jwt.verify(token, SECRET);
+      const user = await this.userService.findByEmail(decoded.email);
+      const result: any = []
+      for (let i = 0; i < user.projectIds.length; i++) {
+        // await this.repository.findOneBy({ _id: user.projectIds[i] });
+        const found: any = await this.repository.findOneBy({ _id: user.projectIds[i] })
+        result.push(this.buildDataRO(found))
+      }
+      return result
+    }
     return await this.repository
       .find()
       .then(data => data.map((el: ProjectEntity) => this.buildDataRO(el)));
@@ -33,7 +48,7 @@ export class ProjectService {
     return this.buildDataRO(data);
   }
 
-  async create(dto: CreateDto): Promise<ProjectData> {
+  async create(dto: CreateDto, token: string): Promise<ProjectData> {
     const data = await this.repository.findOneBy({ name: dto.name, subinfo: dto.subinfo });
     if (data) {
       const errors = { project: 'DATA_ALREADY_EXSIST' };
@@ -86,19 +101,34 @@ export class ProjectService {
     // } else {
     // console.log(this.buildDataRO(await this.repository.save(newEntity)))
     // }
-    return this.buildDataRO(await this.repository.save(newEntity));
+    const saveNewEntity = await this.repository.save(newEntity)
+    const decoded: any = jwt.verify(token, SECRET);
+    const user = await this.userService.findByEmail(decoded.email);
+    user.projectIds.push(newEntity._id)
+    await this.userService.update(user);
+    return this.buildDataRO(saveNewEntity);
   }
 
   async update(id: string, dto: UpdateDto): Promise<UpdateResult | null> {
-    const currentData = await this.repository.findOneBy({ _id: dto.id });
+    const currentData = await this.repository.findOneBy({ _id: dto._id });
     if (currentData) {
-      return await this.repository.update({ _id: dto.id }, Object.assign(currentData, dto));
+      return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
     }
     return null
   }
 
-  async delete(id: string): Promise<DeleteResult> {
-    return await this.repository.delete({ _id: id });
+  async delete(id: string, token: string): Promise<DeleteResult> {
+    const result = await this.repository.delete({ _id: id });
+    if (token) {
+      const decoded: any = jwt.verify(token, SECRET);
+      const user = await this.userService.findByEmail(decoded.email);
+      const index = user.projectIds.indexOf(id);
+      if (index > -1) { // only splice array when item is found
+        user.projectIds.splice(index, 1); // 2nd parameter means remove one item only
+      }
+      await this.userService.update(user);
+    }
+    return result
   }
 
   private buildDataRO(entity: ProjectEntity): ProjectData {

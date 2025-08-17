@@ -5,6 +5,7 @@ import {
   Put,
   Delete,
   Param,
+  Query,
   Controller,
   UsePipes,
 } from '@nestjs/common';
@@ -28,14 +29,17 @@ export class ProjectController {
   }
 
   @Get('projects')
-  async findAll(): Promise<any> {
-    return await this.projectService.findAll();
+  async findAll(@Query() query): Promise<any> {
+    return await this.projectService.findAll(query.token);
   }
 
   // @UsePipes(new ValidationPipe())
   @Post('projects')
-  async create(@Body('data') data: CreateDto): Promise<any> {
-    return this.projectService.create(data);
+  async create(
+    @Body('data') data: CreateDto,
+    @Query() query
+  ): Promise<any> {
+    return this.projectService.create(data, query.token);
   }
 
   @Put('projects/:id')
@@ -47,7 +51,7 @@ export class ProjectController {
   }
 
   @Delete('projects/:id')
-  async delete(@Param() params): Promise<any> {
-    return await this.projectService.delete(params.id);
+  async delete(@Param() params, @Query() query): Promise<any> {
+    return await this.projectService.delete(params.id, query.token);
   }
 }
