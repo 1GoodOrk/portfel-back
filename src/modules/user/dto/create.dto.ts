@@ -2,11 +2,17 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateDto {
   @IsNotEmpty()
-  readonly email: string;
+  readonly data: string;
 
-  @IsNotEmpty()
-  readonly password: string;
+  // @IsNotEmpty()
+  // readonly email: string;
 
-  @IsNotEmpty()
-  readonly organization: string;
+  // @IsNotEmpty()
+  // readonly password: string;
+
+  // @IsNotEmpty()
+  // readonly type: string;
+
+  // @IsNotEmpty()
+  // readonly organization: string;
 }

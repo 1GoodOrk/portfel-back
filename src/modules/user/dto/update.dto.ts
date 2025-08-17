@@ -1,6 +1,7 @@
 export class UpdateDto {
   readonly _id: string;
   readonly email: string;
+  readonly type: string;
   readonly organization: string;
   readonly password: string;
   readonly projectIds: Array<string>;

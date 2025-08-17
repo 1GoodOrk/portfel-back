@@ -63,10 +63,11 @@ export class UserController {
       throw new HttpException({ errors }, 401);
     }
 
-    const { id, email, portfolioIds, projectIds } = req.body;
+    const { id, email, password, portfolioIds, projectIds } = req.body;
     const data = { 
       id, 
       email, 
+      password,
       token: await this.userService.generateJWT(req.body), 
       portfolioIds, 
       projectIds 

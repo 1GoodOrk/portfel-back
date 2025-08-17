@@ -27,6 +27,9 @@ export class UserEntity {
   token: string;
 
   @Column()
+  type: string;
+
+  @Column()
   password: string;
 
   @BeforeInsert()

@@ -11,6 +11,7 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { v6 } from 'uuid';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable()
 export class UserService {
@@ -35,9 +36,8 @@ export class UserService {
   }
 
   async create(dto: CreateDto): Promise<any> {
-    const { organization, email, password } = dto;
-
-    const user = await this.findByMail(email)
+    const original = JSON.parse(CryptoJS.AES.decrypt(dto, SECRET).toString(CryptoJS.enc.Utf8));
+    const user = await this.findByMail(original.email)
     if (user) {
       const errors = { email: 'ALREADY_EXISTS' };
       throw new HttpException(
@@ -48,9 +48,10 @@ export class UserService {
 
     const newUser = new UserEntity();
     newUser._id = v6()
-    newUser.organization = organization;
-    newUser.email = email;
-    newUser.password = password;
+    newUser.organization = original.organization;
+    newUser.email = original.email;
+    newUser.password = await argon2.hash(original.password);
+    newUser.type = 'USER';
     newUser.projectIds = [];
     newUser.portfolioIds = [];
 
@@ -90,10 +91,14 @@ export class UserService {
   }
 // Promise<UserRO>
   async findByEmail(email: any): Promise<any> {
-    const data = await this.repository.findOne(email);
-    if (data) {
-      return this.buildDataRO(data);
+    const data = await this.repository.findOneBy({ email });
+
+    if (!data) {
+      const errors = { error: 'NOT_FOUND' };
+      throw new HttpException({ errors }, 401);
     }
+
+    return this.buildDataRO(data);
   }
 
   public generateJWT(data) {
@@ -103,7 +108,6 @@ export class UserService {
 
     return jwt.sign(
       {
-        id: data._id,
         password: data.password,
         email: data.email,
         exp: exp.getTime() / 1000,
@@ -117,6 +121,7 @@ export class UserService {
       _id: entity._id,
       email: entity.email,
       password: entity.password,
+      type: entity.type,
       token: this.generateJWT(entity),
       organization: entity.organization,
       portfolioIds: entity.portfolioIds,
