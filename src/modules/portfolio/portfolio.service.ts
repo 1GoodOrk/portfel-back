@@ -69,16 +69,10 @@ export class PortfolioService {
     newEntity.subinfo = dto.subinfo;
     newEntity.budget = dto.budget;
     newEntity.profit = dto.profit;
-    newEntity.duration = dto.duration;
     newEntity.location = dto.location;
     if (newEntity.location === 'OUTSIDE') {
       newEntity.town = dto.town;
     }
-    newEntity.optionEco = dto.options.eco;
-    newEntity.optionWar = dto.options.war;
-    newEntity.optionLog = dto.options.log;
-    newEntity.optionSoc = dto.options.soc;
-    newEntity.optionStruc = dto.options.struc;
 
     // const errors = await validate(newEntity);
     // if (errors.length > 0) {
@@ -131,16 +125,8 @@ export class PortfolioService {
       subinfo: entity.subinfo,
       budget: entity.budget,
       profit: entity.profit,
-      duration: entity.duration,
       location: entity.location,
-      town: entity.town,
-      options: {
-        eco: entity.optionEco,
-        war: entity.optionWar,
-        log: entity.optionLog,
-        soc: entity.optionSoc,
-        struc: entity.optionStruc,
-      }
+      town: entity.town
     };
   }
 }

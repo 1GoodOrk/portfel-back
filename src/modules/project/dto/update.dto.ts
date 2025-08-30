@@ -8,7 +8,8 @@ export class UpdateDto {
   readonly processDuration: number;  
   readonly profit: number;
   readonly traffic: number;
-  readonly road: number;
+  readonly forecastProjectTaskAmount: number;
+  readonly road: string;
   readonly distance: number;
   readonly mainRoad: boolean;
   readonly inTown: boolean;

@@ -69,6 +69,7 @@ export class ProjectService {
     newEntity.processDuration = dto.processDuration;
     newEntity.profit = dto.profit;
     newEntity.traffic = dto.traffic;
+    newEntity.forecastProjectTaskAmount = dto.forecastProjectTaskAmount;
     newEntity.road = dto.road;
     newEntity.distance = dto.distance;
     newEntity.mainRoad = dto.mainRoad;
@@ -144,6 +145,7 @@ export class ProjectService {
       processDuration: entity.processDuration,
       profit: entity.profit,
       traffic: entity.traffic,
+      forecastProjectTaskAmount: entity.forecastProjectTaskAmount,
       road: entity.road,
       distance: entity.distance,
       mainRoad: entity.mainRoad,

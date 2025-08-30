@@ -26,7 +26,10 @@ export class CreateDto {
   readonly traffic: number;
 
   @IsNotEmpty()
-  readonly road: number;
+  readonly forecastProjectTaskAmount: number;
+
+  @IsNotEmpty()
+  readonly road: string;
 
   @IsNotEmpty()
   readonly distance: number;

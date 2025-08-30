@@ -43,26 +43,8 @@ export class PortfolioEntity {
   profit: number;
   
   @Column()
-  duration: number;
-
-  @Column()
   location: string;
   
   @Column()
   town?: string;
-
-  @Column()
-  optionEco: number;
-
-  @Column()
-  optionWar: number;
-
-  @Column()
-  optionLog: number;
-
-  @Column()
-  optionSoc: number;
-
-  @Column()
-  optionStruc: number;
 }

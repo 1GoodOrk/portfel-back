@@ -12,14 +12,6 @@ export class UpdateDto {
   readonly subinfo: string;
   readonly budget: number;
   readonly profit: number;
-  readonly duration: number;
   readonly location: string;
   readonly town?: string;
-  readonly options: {
-    eco: number;
-    war: number;
-    log: number;
-    soc: number;
-    struc: number;
-  }
 }

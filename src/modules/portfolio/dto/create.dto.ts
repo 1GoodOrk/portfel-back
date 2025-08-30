@@ -30,18 +30,6 @@ export class CreateDto {
   readonly profit: number;
 
   @IsNotEmpty()
-  readonly duration: number;
-
-  @IsNotEmpty()
   readonly location: string;
   readonly town?: string;
-
-  @IsNotEmpty()
-  readonly options: {
-    eco: number;
-    war: number;
-    log: number;
-    soc: number;
-    struc: number;
-  }
 }

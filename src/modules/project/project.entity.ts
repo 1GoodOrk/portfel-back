@@ -31,7 +31,7 @@ export class ProjectEntity {
   processDuration: number;
   
   @Column()
-  road: number;
+  road: string;
 
   @Column()
   traffic: number;
@@ -47,6 +47,9 @@ export class ProjectEntity {
 
   @Column()
   town: string;
+
+  @Column()
+  forecastProjectTaskAmount: number;
 
   @Column()
   addressStart: string;

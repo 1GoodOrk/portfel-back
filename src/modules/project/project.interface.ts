@@ -8,7 +8,8 @@ export interface ProjectData {
   processDuration: number;
   profit: number;
   traffic: number;
-  road: number;
+  forecastProjectTaskAmount: number;
+  road: string;
   distance: number;
   mainRoad: boolean;
   inTown: boolean;
