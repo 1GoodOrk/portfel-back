@@ -64,6 +64,10 @@ export class ProjectService {
     newEntity.name = dto.name;
     newEntity.subinfo = dto.subinfo;
     newEntity.type = dto.type;
+    newEntity.responsibleName = dto.responsibleName;
+    newEntity.responsibleSurname = dto.responsibleSurname;
+    newEntity.responsibleLastname = dto.responsibleLastname;
+    newEntity.responsibleOrganization = dto.responsibleOrganization;
     newEntity.budget = dto.budget;
     newEntity.budgetSource = dto.budgetSource;
     newEntity.processDuration = dto.processDuration;
@@ -140,6 +144,10 @@ export class ProjectService {
       name: entity.name,
       subinfo: entity.subinfo,
       type: entity.type,
+      responsibleName: entity.responsibleName,
+      responsibleSurname: entity.responsibleSurname,
+      responsibleLastname: entity.responsibleLastname,
+      responsibleOrganization: entity.responsibleOrganization,
       budget: entity.budget,
       budgetSource: entity.budgetSource,
       processDuration: entity.processDuration,

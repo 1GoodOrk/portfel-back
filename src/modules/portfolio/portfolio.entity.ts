@@ -21,6 +21,18 @@ export class PortfolioEntity {
   des: string;
 
   @Column()
+  responsibleName: string;
+
+  @Column()
+  responsibleSurname: string;
+
+  @Column()
+  responsibleLastname: string;
+
+  @Column()
+  responsibleOrganization: string;
+
+  @Column()
   projects: number;
   
   @Column()

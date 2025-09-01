@@ -11,6 +11,18 @@ export class CreateDto {
   readonly type: string;
 
   @IsNotEmpty()
+  readonly responsibleName: string;
+
+  @IsNotEmpty()
+  readonly responsibleSurname: string;
+
+  @IsNotEmpty()
+  readonly responsibleLastname: string;
+
+  @IsNotEmpty()
+  readonly responsibleOrganization: string;
+
+  @IsNotEmpty()
   readonly budget: number;
 
   @IsNotEmpty()
@@ -57,7 +69,8 @@ export class CreateDto {
 
   @IsNotEmpty()
   readonly portfolioId?: {
-    tier: number;
+    name: string;
+    tier: string;
     _id: string;
   };
 

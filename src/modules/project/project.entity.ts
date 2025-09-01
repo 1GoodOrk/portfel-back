@@ -17,6 +17,18 @@ export class ProjectEntity {
 
   @Column()
   type: string;
+
+  @Column()
+  responsibleName: string;
+
+  @Column()
+  responsibleSurname: string;
+
+  @Column()
+  responsibleLastname: string;
+
+  @Column()
+  responsibleOrganization: string;
   
   @Column()
   budget: number;
@@ -65,7 +77,8 @@ export class ProjectEntity {
 
   @Column()
   portfolioId?: {
-    tier: number;
+    name: string;
+    tier: string;
     _id: string;
   };
 

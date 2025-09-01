@@ -3,6 +3,10 @@ export class UpdateDto {
   readonly name: string;
   readonly subinfo: string;
   readonly type: string;
+  readonly responsibleName: string;
+  readonly responsibleSurname: string;
+  readonly responsibleLastname: string;
+  readonly responsibleOrganization: string;
   readonly budget: number;
   readonly budgetSource: string;
   readonly processDuration: number;  
@@ -19,7 +23,8 @@ export class UpdateDto {
   readonly des: string;
   readonly img: string;
   readonly portfolioId?: {
-    tier: number;
+    name: string;
+    tier: string;
     _id: string;
   };
   readonly dateCreation: string;

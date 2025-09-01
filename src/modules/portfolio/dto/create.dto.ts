@@ -11,6 +11,18 @@ export class CreateDto {
   readonly des: string;
 
   @IsNotEmpty()
+  readonly responsibleName: string;
+
+  @IsNotEmpty()
+  readonly responsibleSurname: string;
+
+  @IsNotEmpty()
+  readonly responsibleLastname: string;
+
+  @IsNotEmpty()
+  readonly responsibleOrganization: string;
+
+  @IsNotEmpty()
   readonly projects: number;
 
   @IsNotEmpty()

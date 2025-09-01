@@ -3,6 +3,10 @@ export interface PortfolioData {
   name: string;
   img: string;
   des: string;
+  responsibleName: string;
+  responsibleSurname: string;
+  responsibleLastname: string;
+  responsibleOrganization: string;
   projects: number;
   projectIds: {
     tierI: Array<string>;
@@ -21,6 +25,10 @@ export interface PortfolioDataRO {
   name: string;
   img: string;
   des: string;
+  responsibleName: string;
+  responsibleSurname: string;
+  responsibleLastname: string;
+  responsibleOrganization: string;
   projects: number;
   projectIds: {
     tierI: Array<string>;

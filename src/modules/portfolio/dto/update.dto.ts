@@ -3,6 +3,10 @@ export class UpdateDto {
   readonly name: string;
   readonly img: string;
   readonly des: string;
+  readonly responsibleName: string;
+  readonly responsibleSurname: string;
+  readonly responsibleLastname: string;
+  readonly responsibleOrganization: string;
   readonly projects: number;
   readonly projectIds: {
     tierI: Array<string>;

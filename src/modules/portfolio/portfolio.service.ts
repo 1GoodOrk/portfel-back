@@ -64,6 +64,10 @@ export class PortfolioService {
     newEntity.name = dto.name;
     newEntity.img = dto.img;
     newEntity.des = dto.des;
+    newEntity.responsibleName = dto.responsibleName;
+    newEntity.responsibleSurname = dto.responsibleSurname;
+    newEntity.responsibleLastname = dto.responsibleLastname;
+    newEntity.responsibleOrganization = dto.responsibleOrganization;
     newEntity.projects = dto.projects;
     newEntity.projectIds = dto.projectIds;
     newEntity.subinfo = dto.subinfo;
@@ -89,6 +93,20 @@ export class PortfolioService {
     const user = await this.userService.findByEmail(decoded.email);
     user.portfolioIds.push(newEntity._id)
     await this.userService.update(user);
+    Object.keys(newEntity.projectIds).forEach((tier: string) => {
+      newEntity.projectIds[tier].forEach(async (key: any) => {
+        if (key._id) {
+          key = key._id
+        }
+        const projData = await this.projectService.findById(key);
+        projData.portfolioId = {
+          name: newEntity.name,
+          tier: tier,
+          _id: newEntity._id
+        }
+        await this.projectService.update(key, projData);
+      })
+    })
     return this.buildDataRO(saveNewEntity);
   }
 
@@ -120,6 +138,10 @@ export class PortfolioService {
       name: entity.name,
       img: entity.img,
       des: entity.des,
+      responsibleName: entity.responsibleName,
+      responsibleSurname: entity.responsibleSurname,
+      responsibleLastname: entity.responsibleLastname,
+      responsibleOrganization: entity.responsibleOrganization,
       projects: entity.projects,
       projectIds: entity.projectIds,
       subinfo: entity.subinfo,
