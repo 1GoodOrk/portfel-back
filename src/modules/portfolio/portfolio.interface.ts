@@ -6,7 +6,7 @@ export interface PortfolioData {
   responsibleName: string;
   responsibleSurname: string;
   responsibleLastname: string;
-  responsibleOrganization: string;
+  responsibleOrganization?: string;
   projects: number;
   projectIds: {
     tierI: Array<string>;
@@ -28,7 +28,7 @@ export interface PortfolioDataRO {
   responsibleName: string;
   responsibleSurname: string;
   responsibleLastname: string;
-  responsibleOrganization: string;
+  responsibleOrganization?: string;
   projects: number;
   projectIds: {
     tierI: Array<string>;

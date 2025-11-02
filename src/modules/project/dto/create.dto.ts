@@ -20,6 +20,15 @@ export class CreateDto {
   readonly responsibleLastname: string;
 
   @IsNotEmpty()
+  readonly managerName: string;
+
+  @IsNotEmpty()
+  readonly managerSurname: string;
+
+  @IsNotEmpty()
+  readonly managerLastname: string;
+
+  @IsNotEmpty()
   readonly responsibleOrganization: string;
 
   @IsNotEmpty()

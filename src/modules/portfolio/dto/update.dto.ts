@@ -6,7 +6,7 @@ export class UpdateDto {
   readonly responsibleName: string;
   readonly responsibleSurname: string;
   readonly responsibleLastname: string;
-  readonly responsibleOrganization: string;
+  readonly responsibleOrganization?: string;
   readonly projects: number;
   readonly projectIds: {
     tierI: Array<string>;

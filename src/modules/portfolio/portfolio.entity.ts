@@ -30,7 +30,7 @@ export class PortfolioEntity {
   responsibleLastname: string;
 
   @Column()
-  responsibleOrganization: string;
+  responsibleOrganization?: string;
 
   @Column()
   projects: number;

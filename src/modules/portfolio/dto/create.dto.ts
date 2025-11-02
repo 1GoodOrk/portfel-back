@@ -20,7 +20,7 @@ export class CreateDto {
   readonly responsibleLastname: string;
 
   @IsNotEmpty()
-  readonly responsibleOrganization: string;
+  readonly responsibleOrganization?: string;
 
   @IsNotEmpty()
   readonly projects: number;

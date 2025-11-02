@@ -67,6 +67,9 @@ export class ProjectService {
     newEntity.responsibleName = dto.responsibleName;
     newEntity.responsibleSurname = dto.responsibleSurname;
     newEntity.responsibleLastname = dto.responsibleLastname;
+    newEntity.managerName = dto.managerName;
+    newEntity.managerSurname = dto.managerSurname;
+    newEntity.managerLastname = dto.managerLastname;
     newEntity.responsibleOrganization = dto.responsibleOrganization;
     newEntity.budget = dto.budget;
     newEntity.budgetSource = dto.budgetSource;
@@ -147,6 +150,9 @@ export class ProjectService {
       responsibleName: entity.responsibleName,
       responsibleSurname: entity.responsibleSurname,
       responsibleLastname: entity.responsibleLastname,
+      managerName: entity.managerName,
+      managerSurname: entity.managerSurname,
+      managerLastname: entity.managerLastname,
       responsibleOrganization: entity.responsibleOrganization,
       budget: entity.budget,
       budgetSource: entity.budgetSource,

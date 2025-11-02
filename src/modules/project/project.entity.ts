@@ -28,6 +28,15 @@ export class ProjectEntity {
   responsibleLastname: string;
 
   @Column()
+  managerName: string;
+
+  @Column()
+  managerSurname: string;
+
+  @Column()
+  managerLastname: string;
+
+  @Column()
   responsibleOrganization: string;
   
   @Column()
