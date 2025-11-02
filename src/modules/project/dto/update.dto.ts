@@ -6,6 +6,9 @@ export class UpdateDto {
   readonly responsibleName: string;
   readonly responsibleSurname: string;
   readonly responsibleLastname: string;
+  readonly managerName: string;
+  readonly managerSurname: string;
+  readonly managerLastname: string;
   readonly responsibleOrganization: string;
   readonly budget: number;
   readonly budgetSource: string;
