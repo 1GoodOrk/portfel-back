@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { PortfolioModule } from './modules/portfolio/portfolio.module';
 import { ProjectModule } from './modules/project/project.module';
+import { ProjectVehicleModule } from './modules/project-vehicle/project.module';
 import { MessageModule } from './modules/message/message.module';
 import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
 
@@ -21,6 +22,7 @@ import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
     UserModule,
     PortfolioModule,
     ProjectModule,
+    ProjectVehicleModule,
     MessageModule
   ],
   controllers: [AppController],
