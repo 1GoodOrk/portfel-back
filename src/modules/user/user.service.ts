@@ -55,16 +55,18 @@ export class UserService {
     newUser.projectIds = [];
     newUser.portfolioIds = [];
 
-    const errors = await validate(newUser);
-    if (errors.length > 0) {
-      const _errors = { user: 'USER_DATA_NOT_VALID' };
-      throw new HttpException(
-        { message: 'Input data validation failed', _errors },
-        HttpStatus.BAD_REQUEST,
-      );
-    } else {
+    // TODO: check enitity validation
+    // return this.buildDataRO(await this.repository.findOneBy({ email: newUser.email }))
+    // const errors = await validate(newUser);
+    // if (errors.length > 0) {
+    //   const _errors = { user: 'USER_DATA_NOT_VALID' };
+    //   throw new HttpException(
+    //     { message: 'Input data validation failed', _errors },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // } else {
       return this.buildDataRO(await this.repository.save(newUser))
-    }
+    // }
   }
 
   async update(dto: UpdateDto): Promise<any> {
