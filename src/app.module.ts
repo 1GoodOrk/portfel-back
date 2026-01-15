@@ -10,6 +10,7 @@ import { ProjectVehicleModule } from './modules/project-vehicle/project.module';
 import { ProjectScienceModule } from './modules/project-science/project.module';
 import { MessageModule } from './modules/message/message.module';
 import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
+import { ExpertiseModule } from './modules/expertise/expertise.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
     ProjectModule,
     ProjectVehicleModule,
     ProjectScienceModule,
+    ExpertiseModule,
     MessageModule
   ],
   controllers: [AppController],

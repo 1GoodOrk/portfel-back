@@ -5,6 +5,7 @@ import {
   Put,
   Delete,
   Param,
+  Query,
   Controller,
   UsePipes,
   Req,
@@ -31,8 +32,8 @@ export class UserController {
   }
 
   @Get('users')
-  async findAll(): Promise<Array<any>> {
-    return await this.userService.findAll();
+  async findAll(@Query() query): Promise<Array<any>> {
+    return await this.userService.findAll(query.filter);
   }
 
   @Put('users')
@@ -63,11 +64,12 @@ export class UserController {
       throw new HttpException({ errors }, 401);
     }
 
-    const { id, email, password, portfolioIds, projectIds } = req.body;
+    const { id, email, password, portfolioIds, projectIds, type } = req.body;
     const data = { 
       id, 
       email, 
       password,
+      type,
       token: await this.userService.generateJWT(req.body), 
       portfolioIds, 
       projectIds 

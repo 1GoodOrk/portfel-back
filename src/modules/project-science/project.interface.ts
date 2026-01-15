@@ -2,10 +2,9 @@ export interface ProjectScienceData {
   _id: string;
   name: string;
   subinfo: string;
-  des: string;
-  img: string;
   type: string;
   priority: number;
+  des: string;
   responsibleName: string;
   responsibleSurname: string;
   responsibleLastname: string;
@@ -13,34 +12,18 @@ export interface ProjectScienceData {
   managerSurname: string;
   managerLastname: string;
   responsibleOrganization: string;
-  // volumeOfWork: number;
-  // forecastProjectTaskAmount: number;
-  // term: number;
-  // actionPlan: string;
-  // sphereOfAction: string;
-  // budget: number;
-  // budgetSource: string;
-  // mainLosses: number;
-  // actualCost: number;
-  // additionalLosses: number;
-  // passengerTraffic: number;
-  // ticketPrice: number;
-  // governmentSubsidies: number;
-  // vehicle: string;
-  // infrastructure: string;
-  // staff: string;
-  // technology: string;
-  // options: {
-  //   eco: number;
-  //   war: number;
-  //   log: number;
-  //   soc: number;
-  //   struc: number;
-  // }
-  // performanceIndex: number;
-  // indexOfAssetsEmployed: number;
-  // projectValuation: number;
-  // riskScore: number;
+  volumeOfWork: number;
+  forecastProjectTaskAmount: number;
+  term: number;
+  actionPlan: string;
+  sphereOfAction: string;
+  budget: number;
+  budgetSource: string;
+  governmentSubsidies: string;
+  numberOfOrderDocument: string;
+  staff: string;
+  technology: string;
+  projectExpertiseIds?: Array<string>
 }
 
 export interface ProjectScienceRO {

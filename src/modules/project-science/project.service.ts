@@ -26,7 +26,6 @@ export class ProjectScienceService {
       const user = await this.userService.findByEmail(decoded.email);
       const result: any = []
       for (let i = 0; i < user.projectIds.length; i++) {
-        // await this.repository.findOneBy({ _id: user.projectIds[i] });
         const found: any = await this.repository.findOneBy({ _id: user.projectIds[i] })
         if (found) {
           result.push(this.buildDataRO(found))
@@ -65,7 +64,8 @@ export class ProjectScienceService {
     newEntity.name = dto.name;
     newEntity.subinfo = dto.subinfo;
     newEntity.type = dto.type;
-    // newEntity.priority = dto.priority;
+    newEntity.priority = dto.priority;
+    newEntity.des = dto.des;
     newEntity.responsibleName = dto.responsibleName;
     newEntity.responsibleSurname = dto.responsibleSurname;
     newEntity.responsibleLastname = dto.responsibleLastname;
@@ -75,34 +75,18 @@ export class ProjectScienceService {
     newEntity.responsibleOrganization = dto.responsibleOrganization;
     newEntity.budget = dto.budget;
     newEntity.budgetSource = dto.budgetSource;
-    // newEntity.volumeOfWork = dto.volumeOfWork;
-    // newEntity.forecastProjectTaskAmount = dto.forecastProjectTaskAmount;
-    // newEntity.term = dto.term;
-    // newEntity.actionPlan = dto.actionPlan;
-    // newEntity.sphereOfAction = dto.sphereOfAction;
-    // newEntity.mainLosses = dto.mainLosses;
-    // newEntity.actualCost = dto.actualCost;
-    // newEntity.additionalLosses = dto.additionalLosses;
-    // newEntity.passengerTraffic = dto.passengerTraffic;
-    // newEntity.ticketPrice = dto.ticketPrice;
-    // newEntity.governmentSubsidies = dto.governmentSubsidies;
-    // newEntity.vehicle = dto.vehicle;
-    // newEntity.infrastructure = dto.infrastructure;
-    // newEntity.staff = dto.staff;
-    // newEntity.technology = dto.technology;
-    // newEntity.performanceIndex = dto.performanceIndex;
-    // newEntity.indexOfAssetsEmployed = dto.indexOfAssetsEmployed;
-    // newEntity.projectValuation = dto.projectValuation;
-    // newEntity.riskScore = dto.riskScore;
-    // newEntity.des = dto.des;
-    // newEntity.img = dto.img;
-    // newEntity.portfolioId = dto.portfolioId;
-    // newEntity.optionEco = dto.options.eco;
-    // newEntity.optionWar = dto.options.war;
-    // newEntity.optionLog = dto.options.log;
-    // newEntity.optionSoc = dto.options.soc;
-    // newEntity.optionStruc = dto.options.struc;
-
+    newEntity.volumeOfWork = dto.volumeOfWork;
+    newEntity.forecastProjectTaskAmount = dto.forecastProjectTaskAmount;
+    newEntity.term = dto.term;
+    newEntity.actionPlan = dto.actionPlan;
+    newEntity.sphereOfAction = dto.sphereOfAction;
+    newEntity.governmentSubsidies = dto.governmentSubsidies;
+    newEntity.numberOfOrderDocument = dto.numberOfOrderDocument;
+    newEntity.staff = dto.staff;
+    newEntity.technology = dto.technology;
+    if (!dto.projectExpertiseIds) {
+      newEntity.projectExpertiseIds = []
+    }
     
     // TODO: error for validation => check functionality
     // const errors = await validate(newEntity);
@@ -145,14 +129,14 @@ export class ProjectScienceService {
     return result
   }
 
-  private buildDataRO(entity: ProjectScienceEntity): any {
-  // private buildDataRO(entity: ProjectScienceEntity): ProjectScienceData {
+  private buildDataRO(entity: ProjectScienceEntity): ProjectScienceData {
     return {
       _id: entity._id,
       name: entity.name,
       subinfo: entity.subinfo,
       type: entity.type,
-      // priority: entity.priority,
+      priority: entity.priority,
+      des: entity.des,
       responsibleName: entity.responsibleName,
       responsibleSurname: entity.responsibleSurname,
       responsibleLastname: entity.responsibleLastname,
@@ -160,36 +144,18 @@ export class ProjectScienceService {
       managerSurname: entity.managerSurname,
       managerLastname: entity.managerLastname,
       responsibleOrganization: entity.responsibleOrganization,
-      // budget: entity.budget,
-      // budgetSource: entity.budgetSource,
-      // volumeOfWork: entity.volumeOfWork,
-      // forecastProjectTaskAmount: entity.forecastProjectTaskAmount,
-      // term: entity.term,
-      // actionPlan: entity.actionPlan,
-      // sphereOfAction: entity.sphereOfAction,
-      // mainLosses: entity.mainLosses,
-      // actualCost: entity.actualCost,
-      // additionalLosses: entity.additionalLosses,
-      // passengerTraffic: entity.passengerTraffic,
-      // ticketPrice: entity.ticketPrice,
-      // governmentSubsidies: entity.governmentSubsidies,
-      // vehicle: entity.vehicle,
-      // infrastructure: entity.infrastructure,
-      // staff: entity.staff,
-      // technology: entity.technology,
-      // des: entity.des,
-      // img: entity.img,
-      // options: {
-      //   eco: entity.optionEco,
-      //   war: entity.optionWar,
-      //   log: entity.optionLog,
-      //   soc: entity.optionSoc,
-      //   struc: entity.optionStruc,
-      // },
-      // performanceIndex: entity.performanceIndex,
-      // indexOfAssetsEmployed: entity.indexOfAssetsEmployed,
-      // projectValuation:  entity.projectValuation,
-      // riskScore:  entity.riskScore
+      budget: entity.budget,
+      budgetSource: entity.budgetSource,
+      volumeOfWork: entity.volumeOfWork,
+      forecastProjectTaskAmount: entity.forecastProjectTaskAmount,
+      term: entity.term,
+      actionPlan: entity.actionPlan,
+      sphereOfAction: entity.sphereOfAction,
+      governmentSubsidies: entity.governmentSubsidies,
+      numberOfOrderDocument: entity.numberOfOrderDocument,
+      staff: entity.staff,
+      technology: entity.technology,
+      projectExpertiseIds: entity.projectExpertiseIds
     };
   }
 }

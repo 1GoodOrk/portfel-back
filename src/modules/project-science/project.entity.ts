@@ -19,6 +19,12 @@ export class ProjectScienceEntity {
   type: string;
 
   @Column()
+  priority: number;
+
+  @Column()
+  des: string;
+
+  @Column()
   responsibleName: string;
 
   @Column()
@@ -45,91 +51,33 @@ export class ProjectScienceEntity {
   @Column()
   budgetSource: string;
 
-  // @Column()
-  // forecastProjectTaskAmount: number;
+  @Column()
+  volumeOfWork: number;
 
-  // @Column()
-  // des: string;
+  @Column()
+  forecastProjectTaskAmount: number;
 
-  // @Column()
-  // img: string;
+  @Column()
+  term: number;
 
-  // @Column()
-  // portfolioId?: {
-  //   name: string;
-  //   tier: string;
-  //   _id: string;
-  // };
+  @Column()
+  actionPlan: string;
 
-  // @Column()
-  // optionEco: number;
+  @Column()
+  sphereOfAction: string;
 
-  // @Column()
-  // optionWar: number;
+  @Column()
+  governmentSubsidies: string;
 
-  // @Column()
-  // optionLog: number;
+  @Column()
+  numberOfOrderDocument: string;
 
-  // @Column()
-  // optionSoc: number;
+  @Column()
+  staff: string;
 
-  // @Column()
-  // optionStruc: number;
+  @Column()
+  technology: string;
 
-  // @Column()
-  // volumeOfWork: number;
-
-  // @Column()
-  // term: number;
-
-  // @Column()
-  // actionPlan: string;
-
-  // @Column()
-  // sphereOfAction: string;
-
-  // @Column()
-  // mainLosses: number;
-
-  // @Column()
-  // actualCost: number;
-
-  // @Column()
-  // additionalLosses: number;
-
-  // @Column()
-  // passengerTraffic: number;
-
-  // @Column()
-  // ticketPrice: number;
-
-  // @Column()
-  // governmentSubsidies: number;
-
-  // @Column()
-  // vehicle: string;
-
-  // @Column()
-  // infrastructure: string;
-
-  // @Column()
-  // staff: string;
-
-  // @Column()
-  // technology: string;
-
-  // @Column()
-  // performanceIndex: number;
-
-  // @Column()
-  // indexOfAssetsEmployed: number;
-
-  // @Column()
-  // projectValuation: number;
-
-  // @Column()
-  // priority: number;
-
-  // @Column()
-  // riskScore: number;
+  @Column()
+  projectExpertiseIds?: Array<string>
 }

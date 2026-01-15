@@ -21,10 +21,13 @@ export class UserService {
   ) {}
 
   // Promise<Array<UserEntity>>
-  async findAll(): Promise<Array<any>> {
+  async findAll(filter?: string): Promise<Array<any>> {
     return await this.repository
       .find()
-      .then(data => data.map((el: UserEntity) => this.buildDataRO(el)));
+      .then(data => data
+        .filter((el: UserEntity) => filter ? el.type === filter : el)
+        .map((el: UserEntity) => this.buildDataRO(el))
+      );
   }
 
   private async findByMail(email: string): Promise<UserEntity | null> {
@@ -51,7 +54,7 @@ export class UserService {
     newUser.organization = original.organization;
     newUser.email = original.email;
     newUser.password = await argon2.hash(original.password);
-    newUser.type = 'USER';
+    newUser.type = original.type ? original.type : 'USER';
     newUser.projectIds = [];
     newUser.portfolioIds = [];
 
