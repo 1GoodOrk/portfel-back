@@ -42,7 +42,7 @@ export class ExpertiseController {
   }
 
   @Delete('expertise/:id')
-  async delete(@Param() params): Promise<any> {
-    return await this.service.delete(params.id);
+  async delete(@Param() params, @Query() query): Promise<any> {
+    return await this.service.delete(params.id, query.project);
   }
 }

@@ -4,6 +4,8 @@ export class UpdateDto {
   readonly risksLean: any;
   readonly risksDigital: any;
   readonly risksClassic: any;
+  readonly risksClassicTables: any;
+  readonly recommendationDescription: string;
   readonly status: string;
   readonly approve: Array<any>;
 }

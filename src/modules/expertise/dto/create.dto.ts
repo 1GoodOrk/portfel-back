@@ -14,6 +14,12 @@ export class CreateDto {
   readonly risksClassic: any;
 
   @IsNotEmpty()
+  readonly risksClassicTables: any;
+
+  @IsNotEmpty()
+  readonly recommendationDescription: string;
+
+  @IsNotEmpty()
   readonly status: string;
 
   @IsNotEmpty()

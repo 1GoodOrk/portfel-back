@@ -6,10 +6,17 @@ import { UserService } from './user.service';
 import { AuthMiddleware } from './auth.middleware';
 
 import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { ExpertiseService } from '../expertise/expertise.service';
+import { ExpertiseEntity } from '../expertise/expertise.entity';
+import { ProjectEntity } from '../project/project.entity';
+import { ProjectService } from '../project/project.service';
+import { ProjectScienceEntity } from '../project-science/project.entity';
+import { ProjectScienceService } from '../project-science/project.service';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
-  providers: [UserService],
+  imports: [TypeOrmModule.forFeature([UserEntity, ExpertiseEntity, ProjectEntity, ProjectScienceEntity])],
+  providers: [UserService, ExpertiseService, ProjectService, ProjectScienceService],
   controllers: [
     UserController
   ],

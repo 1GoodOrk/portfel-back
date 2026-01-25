@@ -41,7 +41,7 @@ export class ExpertiseService {
     return this.buildDataRO(data);
   }
 
-  async create(dto: CreateDto, id: string): Promise<IExpertiseData> {
+  async create(dto: CreateDto, id: string): Promise<IExpertiseData | any> {
     // const data = await this.repository.findOneBy({ theme: dto.theme });
     // if (data) {
     //   const errors = { project: 'DATA_ALREADY_EXSIST' };
@@ -50,30 +50,45 @@ export class ExpertiseService {
     //     HttpStatus.BAD_REQUEST,
     //   );
     // }
-    const newEntity = new ExpertiseEntity();
-    newEntity._id = v6();
-    newEntity.email = dto.email;
-    newEntity.projectId = id;
-    newEntity.risksLean = dto.risksLean;
-    newEntity.risksDigital = dto.risksDigital;
-    newEntity.risksClassic = dto.risksClassic;
-    newEntity.status = dto.status
-    newEntity.approve = dto.approve
-  
-    const saveNewEntity = await this.repository.save(newEntity)
     const project = await this.projectScienceService.findById(id);
     if (!project.projectExpertiseIds) {
       project.projectExpertiseIds = []
     }
-    project.projectExpertiseIds.push(newEntity._id)
-    await this.projectScienceService.update(project._id, project);
-    const user = await this.userService.findByEmail(newEntity.email);
-    if (user.projectIds.indexOf(project._id) === -1) {
-      user.projectIds.push(project._id)
-    }
-    await this.userService.update(user);
+    let expertiseForThatProjectAlreadyExists: boolean = false
+    const expertises = await this.repository.find()
+    expertises.forEach((expert: IExpertiseData) => {
+      if (expert.email === dto.email && expert.projectId === id) {
+        expertiseForThatProjectAlreadyExists = true
+      }
+    })
+    if (expertiseForThatProjectAlreadyExists) {
+      new Promise((resolve) => {
+        resolve({ name: 'ALLREADY_EXISTS' })
+      });
+    } else {
+      const newEntity = new ExpertiseEntity();
+      newEntity._id = v6();
+      newEntity.email = dto.email;
+      newEntity.projectId = id;
+      newEntity.risksLean = dto.risksLean;
+      newEntity.risksDigital = dto.risksDigital;
+      newEntity.risksClassic = dto.risksClassic;
+      newEntity.risksClassicTables = dto.risksClassicTables;
+      newEntity.recommendationDescription = dto.recommendationDescription;
+      newEntity.status = dto.status
+      newEntity.approve = dto.approve
+    
+      const saveNewEntity = await this.repository.save(newEntity)
+      project.projectExpertiseIds.push(newEntity._id)
+      await this.projectScienceService.update(project._id, project);
+      const user = await this.userService.findByEmail(newEntity.email);
+      if (user.projectIds.indexOf(project._id) === -1) {
+        user.projectIds.push(project._id)
+      }
+      await this.userService.update(user);
 
-    return this.buildDataRO(saveNewEntity);
+      return this.buildDataRO(saveNewEntity);
+    }
   }
 
   async update(dto: UpdateDto): Promise<UpdateResult | null> {
@@ -84,8 +99,21 @@ export class ExpertiseService {
     return null
   }
   
-  async delete(id: string): Promise<DeleteResult> {
-    const data = await this.repository.findOneBy({ _id: id });
+  async delete(idExpertise: string, id: string): Promise<DeleteResult> {
+    const data: any = await this.repository.findOneBy({ _id: idExpertise });
+    const project = await this.projectScienceService.findById(id);
+    if (!project.projectExpertiseIds) {
+      project.projectExpertiseIds = []
+    }
+    if (project.projectExpertiseIds.findIndex((ids: string) => ids === id) > -1) {
+      project.projectExpertiseIds.splice(project.projectExpertiseIds.findIndex((ids: string) => ids === id), 1)
+    }
+    await this.projectScienceService.update(project._id, project);
+    const user = await this.userService.findByEmail(data.email);
+    if (user.projectIds.indexOf(project._id) > -1) {
+      user.projectIds.splice(user.projectIds.indexOf(project._id), 1)
+    }
+    await this.userService.update(user);
     return await this.repository.delete({ _id: id });
   }
 
@@ -96,6 +124,8 @@ export class ExpertiseService {
       risksLean: entity.risksLean,
       risksDigital: entity.risksDigital,
       risksClassic: entity.risksClassic,
+      risksClassicTables: entity.risksClassicTables,
+      recommendationDescription: entity.recommendationDescription,
       status: entity.status,
       projectId: entity.projectId,
       approve: entity.approve,

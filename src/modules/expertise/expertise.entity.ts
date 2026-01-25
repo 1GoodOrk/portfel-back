@@ -20,6 +20,12 @@ export class ExpertiseEntity {
 
   @Column()
   risksClassic: any;
+  
+  @Column()
+  risksClassicTables: any;
+  
+  @Column()
+  recommendationDescription: string;
 
   @Column()
   status: string;
