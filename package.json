@@ -1,6 +1,6 @@
 {
   "name": "project-back",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "",
   "author": "",
   "private": true,
@@ -43,8 +43,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
-    "@nestjs/cli": "^10.4.9",
-    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/cli": "^11.0.16",
+    "@nestjs/schematics": "^7.3.1",
     "@nestjs/testing": "^11.0.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
