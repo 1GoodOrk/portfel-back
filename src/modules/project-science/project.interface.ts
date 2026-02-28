@@ -1,28 +1,16 @@
 export interface ProjectScienceData {
   _id: string;
   name: string;
-  subinfo: string;
   type: string;
-  priority: number;
+  projectGoal: string;
+  projectProduct: string;
   des: string;
+  priority: number;
   responsibleName: string;
-  responsibleSurname: string;
-  responsibleLastname: string;
-  managerName: string;
-  managerSurname: string;
-  managerLastname: string;
-  responsibleOrganization: string;
-  volumeOfWork: number;
-  forecastProjectTaskAmount: number;
-  term: number;
-  actionPlan: string;
-  sphereOfAction: string;
-  budget: number;
-  budgetSource: string;
-  governmentSubsidies: string;
+  customer: string;
   numberOfOrderDocument: string;
+  data: string;
   staff: string;
-  technology: string;
   projectExpertiseIds?: Array<string>
 }
 

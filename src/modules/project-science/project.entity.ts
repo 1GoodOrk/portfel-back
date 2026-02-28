@@ -11,72 +11,36 @@ export class ProjectScienceEntity {
 
   @Column()
   name: string;
-  
-  @Column()
-  subinfo: string;
 
   @Column()
   type: string;
 
   @Column()
-  priority: number;
+  projectGoal: string;
+
+  @Column()
+  projectProduct: string;
 
   @Column()
   des: string;
 
   @Column()
+  priority: number;
+
+  @Column()
   responsibleName: string;
 
   @Column()
-  responsibleSurname: string;
-
-  @Column()
-  responsibleLastname: string;
-
-  @Column()
-  managerName: string;
-
-  @Column()
-  managerSurname: string;
-
-  @Column()
-  managerLastname: string;
-
-  @Column()
-  responsibleOrganization: string;
-  
-  @Column()
-  budget: number;
-
-  @Column()
-  budgetSource: string;
-
-  @Column()
-  volumeOfWork: number;
-
-  @Column()
-  forecastProjectTaskAmount: number;
-
-  @Column()
-  term: number;
-
-  @Column()
-  actionPlan: string;
-
-  @Column()
-  sphereOfAction: string;
-
-  @Column()
-  governmentSubsidies: string;
+  customer: string;
 
   @Column()
   numberOfOrderDocument: string;
 
   @Column()
-  staff: string;
+  data: string;
 
   @Column()
-  technology: string;
+  staff: string;
 
   @Column()
   projectExpertiseIds?: Array<string>

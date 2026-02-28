@@ -50,7 +50,7 @@ export class ProjectScienceService {
   }
 
   async create(dto: CreateDto, token: string): Promise<ProjectScienceData> {
-    const data = await this.repository.findOneBy({ name: dto.name, subinfo: dto.subinfo });
+    const data = await this.repository.findOneBy({ name: dto.name });
     if (data) {
       const errors = { project: 'DATA_ALREADY_EXSIST' };
       throw new HttpException(
@@ -62,32 +62,18 @@ export class ProjectScienceService {
 
     newEntity._id = v6();
     newEntity.name = dto.name;
-    newEntity.subinfo = dto.subinfo;
     newEntity.type = dto.type;
-    newEntity.priority = dto.priority;
+    newEntity.projectGoal = dto.projectGoal;
+    newEntity.projectProduct = dto.projectProduct;
     newEntity.des = dto.des;
+    newEntity.priority = dto.priority;
     newEntity.responsibleName = dto.responsibleName;
-    newEntity.responsibleSurname = dto.responsibleSurname;
-    newEntity.responsibleLastname = dto.responsibleLastname;
-    newEntity.managerName = dto.managerName;
-    newEntity.managerSurname = dto.managerSurname;
-    newEntity.managerLastname = dto.managerLastname;
-    newEntity.responsibleOrganization = dto.responsibleOrganization;
-    newEntity.budget = dto.budget;
-    newEntity.budgetSource = dto.budgetSource;
-    newEntity.volumeOfWork = dto.volumeOfWork;
-    newEntity.forecastProjectTaskAmount = dto.forecastProjectTaskAmount;
-    newEntity.term = dto.term;
-    newEntity.actionPlan = dto.actionPlan;
-    newEntity.sphereOfAction = dto.sphereOfAction;
-    newEntity.governmentSubsidies = dto.governmentSubsidies;
+    newEntity.customer = dto.customer;
     newEntity.numberOfOrderDocument = dto.numberOfOrderDocument;
+    newEntity.data = dto.data;
     newEntity.staff = dto.staff;
-    newEntity.technology = dto.technology;
-    if (!dto.projectExpertiseIds) {
-      newEntity.projectExpertiseIds = []
-    }
-    
+    newEntity.projectExpertiseIds = [] 
+
     // TODO: error for validation => check functionality
     // const errors = await validate(newEntity);
     // if (errors.length > 0) {
@@ -133,28 +119,16 @@ export class ProjectScienceService {
     return {
       _id: entity._id,
       name: entity.name,
-      subinfo: entity.subinfo,
       type: entity.type,
-      priority: entity.priority,
+      projectGoal: entity.projectGoal,
+      projectProduct: entity.projectProduct,
       des: entity.des,
+      priority: entity.priority,
       responsibleName: entity.responsibleName,
-      responsibleSurname: entity.responsibleSurname,
-      responsibleLastname: entity.responsibleLastname,
-      managerName: entity.managerName,
-      managerSurname: entity.managerSurname,
-      managerLastname: entity.managerLastname,
-      responsibleOrganization: entity.responsibleOrganization,
-      budget: entity.budget,
-      budgetSource: entity.budgetSource,
-      volumeOfWork: entity.volumeOfWork,
-      forecastProjectTaskAmount: entity.forecastProjectTaskAmount,
-      term: entity.term,
-      actionPlan: entity.actionPlan,
-      sphereOfAction: entity.sphereOfAction,
-      governmentSubsidies: entity.governmentSubsidies,
+      customer: entity.customer,
       numberOfOrderDocument: entity.numberOfOrderDocument,
+      data: entity.data,
       staff: entity.staff,
-      technology: entity.technology,
       projectExpertiseIds: entity.projectExpertiseIds
     };
   }

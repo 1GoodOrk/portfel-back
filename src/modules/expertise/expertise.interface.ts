@@ -1,10 +1,9 @@
 export interface IExpertiseData {
   _id: string;
-  email: string;
-  risksLean: any;
-  risksDigital: any;
-  risksClassic: any;
-  risksClassicTables: any;
+  type: string;
+  email: Array<any>;
+  generalExperts?: any;
+  risksData: any;
   recommendationDescription: string;
   status: string;
   projectId: string;

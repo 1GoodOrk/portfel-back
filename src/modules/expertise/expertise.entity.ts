@@ -10,19 +10,16 @@ export class ExpertiseEntity {
   _id: string;
 
   @Column()
-  email: string;
-  
-  @Column()
-  risksLean: any;
-  
-  @Column()
-  risksDigital: any;
+  type: string;
 
   @Column()
-  risksClassic: any;
-  
+  email: Array<any>;
+
   @Column()
-  risksClassicTables: any;
+  generalExperts?: any;
+
+  @Column()
+  risksData: any;
   
   @Column()
   recommendationDescription: string;

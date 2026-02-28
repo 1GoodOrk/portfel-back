@@ -68,12 +68,11 @@ export class ExpertiseService {
     } else {
       const newEntity = new ExpertiseEntity();
       newEntity._id = v6();
+      newEntity.type = dto.type;
       newEntity.email = dto.email;
+      newEntity.generalExperts = dto.generalExperts;
       newEntity.projectId = id;
-      newEntity.risksLean = dto.risksLean;
-      newEntity.risksDigital = dto.risksDigital;
-      newEntity.risksClassic = dto.risksClassic;
-      newEntity.risksClassicTables = dto.risksClassicTables;
+      newEntity.risksData = dto.risksData;
       newEntity.recommendationDescription = dto.recommendationDescription;
       newEntity.status = dto.status
       newEntity.approve = dto.approve
@@ -81,11 +80,13 @@ export class ExpertiseService {
       const saveNewEntity = await this.repository.save(newEntity)
       project.projectExpertiseIds.push(newEntity._id)
       await this.projectScienceService.update(project._id, project);
-      const user = await this.userService.findByEmail(newEntity.email);
-      if (user.projectIds.indexOf(project._id) === -1) {
-        user.projectIds.push(project._id)
-      }
-      await this.userService.update(user);
+      newEntity.email.forEach(async (item: any) => {
+        const user = await this.userService.findByEmail(item.email);
+        if (user.projectIds.indexOf(project._id) === -1) {
+          user.projectIds.push(project._id)
+        }
+        await this.userService.update(user);
+      });
 
       return this.buildDataRO(saveNewEntity);
     }
@@ -109,22 +110,24 @@ export class ExpertiseService {
       project.projectExpertiseIds.splice(project.projectExpertiseIds.findIndex((ids: string) => ids === id), 1)
     }
     await this.projectScienceService.update(project._id, project);
-    const user = await this.userService.findByEmail(data.email);
-    if (user.projectIds.indexOf(project._id) > -1) {
-      user.projectIds.splice(user.projectIds.indexOf(project._id), 1)
-    }
-    await this.userService.update(user);
-    return await this.repository.delete({ _id: id });
+    console.log(data.email)
+    data.email.forEach(async (item: any) => {
+      const user = await this.userService.findByEmail(item.email);
+      if (user.projectIds.indexOf(project._id) > -1) {
+        user.projectIds.splice(user.projectIds.indexOf(project._id), 1)
+      }
+      await this.userService.update(user);
+    });
+    return await this.repository.delete({ _id: idExpertise });
   }
 
   private buildDataRO(entity: ExpertiseEntity): IExpertiseData {
     return {
       _id: entity._id,
+      type: entity.type,
       email: entity.email,
-      risksLean: entity.risksLean,
-      risksDigital: entity.risksDigital,
-      risksClassic: entity.risksClassic,
-      risksClassicTables: entity.risksClassicTables,
+      generalExperts: entity.generalExperts,
+      risksData: entity.risksData,
       recommendationDescription: entity.recommendationDescription,
       status: entity.status,
       projectId: entity.projectId,
