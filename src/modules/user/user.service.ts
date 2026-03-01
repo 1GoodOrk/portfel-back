@@ -27,7 +27,7 @@ export class UserService {
   async findAll(filter?: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const data = JSON
-        .parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+        .parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
         .map((item: any) => this.buildDataRO(item))
       resolve(data)
     })
@@ -42,7 +42,7 @@ export class UserService {
 
   private async findByMail(email: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
       resolve(data.find((el: any) => el.email === email))
     })
 
@@ -75,9 +75,9 @@ export class UserService {
     newUser.portfolioIds = [];
 
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
       data.push(newUser)
-      writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
+      writeFileSync(join(process.cwd(), '/src/tmp/users.json'), JSON.stringify(data))
       resolve(this.buildDataRO(newUser))
     })
     // return this.buildDataRO(await this.repository.save(newUser))
@@ -85,18 +85,18 @@ export class UserService {
 
   async update(dto: UpdateDto): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === dto._id)
       if (index > -1) {
         data[index] = Object.assign(data[index], dto)
-        writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
+        writeFileSync(join(process.cwd(), '/src/tmp/users.json'), JSON.stringify(data))
         resolve(data)
       } else {
         resolve({ STATUS: 'NOT_FOUND' })
       }
     })
     // return new Promise<any>((resolve, reject) => {
-    //   const data = readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8')
+    //   const data = readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8')
 
     //   resolve(data)
     // })
@@ -109,11 +109,11 @@ export class UserService {
 
   async delete(id: string): Promise<DeleteResult> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === id)
       if (index > -1) {
         data.splice(index, 1)
-        writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
+        writeFileSync(join(process.cwd(), '/src/tmp/users.json'), JSON.stringify(data))
         resolve(data)
       } else {
         resolve({ STATUS: 'NOT_FOUND' })
@@ -124,7 +124,7 @@ export class UserService {
 
   async findById(id: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === id)
       if (index > -1) {
         resolve(this.buildDataRO(data[index]))
@@ -143,7 +143,7 @@ export class UserService {
 
   async findByEmail(email: any): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/users.json'), 'utf8'))
       resolve(data.find((el: any) => el.email === email))
     })
     // const data = await this.repository.findOneBy({ email });

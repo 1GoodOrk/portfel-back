@@ -29,13 +29,13 @@ export class ProjectScienceService {
         const decoded: any = jwt.verify(token, SECRET);
         const user = await this.userService.findByEmail(decoded.email);
         const data = JSON
-          .parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+          .parse(readFileSync(join(process.cwd(), '/src/tmp/project-science.json'), 'utf8'))
           .filter((item: any) => user.projectIds.find((projectId: any) => projectId === item._id))
           .map((item: any) => this.buildDataRO(item))
         resolve(data)
       } else {
         const data = JSON
-          .parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+          .parse(readFileSync(join(process.cwd(), '/src/tmp/project-science.json'), 'utf8'))
           .map((item: any) => this.buildDataRO(item))
         resolve(data)
       }
@@ -59,7 +59,7 @@ export class ProjectScienceService {
 
   async findById(id: string): Promise<ProjectScienceData> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/project-science.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === id)
       if (index > -1) {
         resolve(this.buildDataRO(data[index]))
@@ -109,9 +109,9 @@ export class ProjectScienceService {
       user.projectIds.push(newEntity._id)
       await this.userService.update(user);
 
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/project-science.json'), 'utf8'))
       data.push(newEntity)
-      writeFileSync(join(process.cwd(), '/src/data/project-science.json'), JSON.stringify(data))
+      writeFileSync(join(process.cwd(), '/src/tmp/project-science.json'), JSON.stringify(data))
       resolve(this.buildDataRO(newEntity))
     })
     // const saveNewEntity = await this.repository.save(newEntity)
@@ -124,11 +124,11 @@ export class ProjectScienceService {
 
   async update(id: string, dto: UpdateDto): Promise<UpdateResult | null> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/project-science.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === dto._id)
       if (index > -1) {
         data[index] = Object.assign(data[index], dto)
-        writeFileSync(join(process.cwd(), '/src/data/project-science.json'), JSON.stringify(data))
+        writeFileSync(join(process.cwd(), '/src/tmp/project-science.json'), JSON.stringify(data))
         resolve(data)
       } else {
         resolve({ STATUS: 'NOT_FOUND' })
@@ -151,11 +151,11 @@ export class ProjectScienceService {
       }
       await this.userService.update(user);
 
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/project-science.json'), 'utf8'))
       const indexData = data.findIndex((el: any) => el._id === id)
       if (indexData > -1) {
         data.splice(indexData, 1)
-        writeFileSync(join(process.cwd(), '/src/data/project-science.json'), JSON.stringify(data))
+        writeFileSync(join(process.cwd(), '/src/tmp/project-science.json'), JSON.stringify(data))
         resolve(data)
       } else {
         resolve({ STATUS: 'NOT_FOUND' })

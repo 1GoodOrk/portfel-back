@@ -26,7 +26,7 @@ export class ExpertiseService {
     return new Promise<any>(async (resolve, reject) => {
       const project = await this.projectScienceService.findById(id);
       const data = JSON
-        .parse(readFileSync(join(process.cwd(), '/src/data/expertise.json'), 'utf8'))
+        .parse(readFileSync(join(process.cwd(), '/src/tmp/expertise.json'), 'utf8'))
         .filter((item: any) => project.projectExpertiseIds?.find((projectId: any) => projectId === item._id))
         .map((item: any) => this.buildDataRO(item))
       resolve(data)
@@ -42,7 +42,7 @@ export class ExpertiseService {
 
   async findById(id: string): Promise<IExpertiseData> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/expertise.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/expertise.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === id)
       if (index > -1) {
         resolve(this.buildDataRO(data[index]))
@@ -106,9 +106,9 @@ export class ExpertiseService {
         // user.projectIds.push(newEntity._id)
         // await this.userService.update(user);
   
-        const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/experise.json'), 'utf8'))
+        const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/experise.json'), 'utf8'))
         data.push(newEntity)
-        writeFileSync(join(process.cwd(), '/src/data/experise.json'), JSON.stringify(data))
+        writeFileSync(join(process.cwd(), '/src/tmp/experise.json'), JSON.stringify(data))
         resolve(this.buildDataRO(newEntity))
       })
     
@@ -128,11 +128,11 @@ export class ExpertiseService {
 
   async update(dto: UpdateDto): Promise<UpdateResult | null> {
     return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/expertise.json'), 'utf8'))
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/expertise.json'), 'utf8'))
       const index = data.findIndex((el: any) => el._id === dto._id)
       if (index > -1) {
         data[index] = Object.assign(data[index], dto)
-        writeFileSync(join(process.cwd(), '/src/data/expertise.json'), JSON.stringify(data))
+        writeFileSync(join(process.cwd(), '/src/tmp/expertise.json'), JSON.stringify(data))
         resolve(data)
       } else {
         resolve({ STATUS: 'NOT_FOUND' })
@@ -147,7 +147,7 @@ export class ExpertiseService {
   
   async delete(idExpertise: string, id: string): Promise<DeleteResult> {
     return new Promise<any>(async (resolve, reject) => {
-      const exp: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/expertise.json'), 'utf8'))
+      const exp: any = JSON.parse(readFileSync(join(process.cwd(), '/src/tmp/expertise.json'), 'utf8'))
       const indexExp = exp.findIndex((el: any) => el._id === id)
 
       const project = await this.projectScienceService.findById(id);
@@ -167,7 +167,7 @@ export class ExpertiseService {
 
       if (indexExp > -1) {
         exp.splice(indexExp, 1)
-        writeFileSync(join(process.cwd(), '/src/data/expertise.json'), JSON.stringify(exp))
+        writeFileSync(join(process.cwd(), '/src/tmp/expertise.json'), JSON.stringify(exp))
         resolve(exp)
       } else {
         resolve({ STATUS: 'NOT_FOUND' })
