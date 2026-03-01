@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "install": "npm install --legacy-peer-deps",
   "builds": [
     {
       "src": "src/main.ts",
