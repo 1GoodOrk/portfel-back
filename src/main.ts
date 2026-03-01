@@ -21,6 +21,10 @@ async function bootstrap() {
 
   await app.listen(27182);
 
+  // app.get('/', (req: any, res) => {
+  //   res.send('Hello World!');
+  // });
+
   // (async () => {
   //   const listener = await ngrok.forward({
   //     addr: 27182,
