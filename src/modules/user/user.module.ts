@@ -5,7 +5,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { AuthMiddleware } from './auth.middleware';
 
-import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { LoggerMiddleware } from '../../middleware/logger.middleware';
 import { ExpertiseService } from '../expertise/expertise.service';
 // import { ExpertiseEntity } from '../expertise/expertise.entity';
 // import { ProjectEntity } from '../project/project.entity';

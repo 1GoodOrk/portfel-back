@@ -4,7 +4,7 @@ import { ExpertiseController } from './expertise.controller';
 // import { ExpertiseEntity } from './expertise.entity';
 import { ExpertiseService } from './expertise.service';
 
-import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { LoggerMiddleware } from '../../middleware/logger.middleware';
 import { UserService } from '../user/user.service';
 // import { UserEntity } from '../user/user.entity';
 import { ProjectScienceService } from '../project-science/project.service';

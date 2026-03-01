@@ -4,7 +4,7 @@ import { PortfolioController } from './portfolio.controller';
 import { PortfolioEntity } from './portfolio.entity';
 import { PortfolioService } from './portfolio.service';
 
-import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { LoggerMiddleware } from '../../middleware/logger.middleware';
 
 import { ProjectService } from '../project/project.service';
 // import { ProjectEntity } from '../project/project.entity';

@@ -4,7 +4,7 @@ import { ProjectScienceController } from './project.controller';
 // import { ProjectScienceEntity } from './project.entity';
 import { ProjectScienceService } from './project.service';
 
-import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { LoggerMiddleware } from '../../middleware/logger.middleware';
 
 import { UserService } from '../user/user.service';
 // import { UserEntity } from '../user/user.entity';

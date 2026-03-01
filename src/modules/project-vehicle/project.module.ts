@@ -4,7 +4,7 @@ import { ProjectVehicleController } from './project.controller';
 // import { ProjectVehicleEntity } from './project.entity';
 import { ProjectVehicleService } from './project.service';
 
-import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { LoggerMiddleware } from '../../middleware/logger.middleware';
 
 import { UserService } from '../user/user.service';
 // import { UserEntity } from '../user/user.entity';

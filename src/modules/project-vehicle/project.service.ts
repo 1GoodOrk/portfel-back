@@ -9,7 +9,7 @@ import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
 import { v6 } from 'uuid';
 import * as jwt from 'jsonwebtoken';
-import { SECRET } from '@port/config';
+// import { SECRET } from '../../config';
 import { UserService } from '../user/user.service';
 
 @Injectable()

@@ -3,7 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 // import * as ngrok from '@ngrok/ngrok';
 
 import { AppModule } from './app.module';
-import { WinstonLogger } from '@port/services/winston.logger';
+import { WinstonLogger } from './services/winston.logger';
 
 async function bootstrap() {
   const appOptions = { cors: true };

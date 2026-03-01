@@ -4,7 +4,7 @@ import { MessageController } from './message.controller';
 // import { MessageEntity } from './message.entity';
 import { MessageService } from './message.service';
 
-import { LoggerMiddleware } from '@port/middleware/logger.middleware';
+import { LoggerMiddleware } from '../../middleware/logger.middleware';
 
 @Module({
   // imports: [TypeOrmModule.forFeature([MessageEntity])],
