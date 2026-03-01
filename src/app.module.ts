@@ -14,13 +14,13 @@ import { ExpertiseModule } from './modules/expertise/expertise.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      url: MONGO_DB,
-      database: MONGO_DB_NAME,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'mongodb',
+    //   url: MONGO_DB,
+    //   database: MONGO_DB_NAME,
+    //   entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    //   synchronize: true,
+    // }),
     UserModule,
     PortfolioModule,
     ProjectModule,

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
-import { ExpertiseEntity } from './expertise.entity';
+// import { ExpertiseEntity } from './expertise.entity';
 import { CreateDto, UpdateDto } from './dto';
 import { IExpertiseData } from './expertise.interface';
 import { validate } from 'class-validator';
@@ -16,8 +16,8 @@ import { join } from 'node:path';
 @Injectable()
 export class ExpertiseService {
   constructor(
-    @InjectRepository(ExpertiseEntity)
-    private readonly repository: Repository<ExpertiseEntity>,
+    // @InjectRepository(ExpertiseEntity)
+    // private readonly repository: Repository<ExpertiseEntity>,
     private readonly projectScienceService: ProjectScienceService,
     private readonly userService: UserService
   ) {}
@@ -74,18 +74,19 @@ export class ExpertiseService {
       project.projectExpertiseIds = []
     }
     let expertiseForThatProjectAlreadyExists: boolean = false
-    const expertises = await this.repository.find()
-    expertises.forEach((expert: IExpertiseData) => {
-      if (expert.email === dto.email && expert.projectId === id) {
-        expertiseForThatProjectAlreadyExists = true
-      }
-    })
+    // const expertises = await this.repository.find()
+    // expertises.forEach((expert: IExpertiseData) => {
+    //   if (expert.email === dto.email && expert.projectId === id) {
+    //     expertiseForThatProjectAlreadyExists = true
+    //   }
+    // })
     if (expertiseForThatProjectAlreadyExists) {
       new Promise((resolve) => {
         resolve({ name: 'ALLREADY_EXISTS' })
       });
     } else {
-      const newEntity = new ExpertiseEntity();
+      // const newEntity = new ExpertiseEntity();
+      const newEntity: any = {};
       newEntity._id = v6();
       newEntity.type = dto.type;
       newEntity.email = dto.email;
@@ -193,7 +194,7 @@ export class ExpertiseService {
     // return await this.repository.delete({ _id: idExpertise });
   }
 
-  private buildDataRO(entity: ExpertiseEntity): IExpertiseData {
+  private buildDataRO(entity: any): any {
     return {
       _id: entity._id,
       type: entity.type,

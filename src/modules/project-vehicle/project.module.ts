@@ -1,16 +1,17 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ProjectVehicleController } from './project.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProjectVehicleEntity } from './project.entity';
+// import { TypeOrmModule } from '@nestjs/typeorm';
+// import { ProjectVehicleEntity } from './project.entity';
 import { ProjectVehicleService } from './project.service';
 
 import { LoggerMiddleware } from '@port/middleware/logger.middleware';
 
 import { UserService } from '../user/user.service';
-import { UserEntity } from '../user/user.entity';
+// import { UserEntity } from '../user/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProjectVehicleEntity, UserEntity])],
+  // imports: [TypeOrmModule.forFeature([ProjectVehicleEntity, UserEntity])],
+  imports: [],
   providers: [ProjectVehicleService, UserService],
   controllers: [
     ProjectVehicleController

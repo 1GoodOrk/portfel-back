@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getRepository, DeleteResult } from 'typeorm';
-import { UserEntity } from './user.entity';
+// import { UserEntity } from './user.entity';
 import { CreateDto, LoginDto, UpdateDto } from './dto';
 const jwt = require('jsonwebtoken');
 import { SECRET } from '../../config';
@@ -20,8 +20,8 @@ import { join } from 'node:path';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly repository: Repository<UserEntity>,
+    // @InjectRepository(UserEntity)
+    // private readonly repository: Repository<UserEntity>,
   ) {}
 
   async findAll(filter?: string): Promise<any> {
@@ -40,7 +40,7 @@ export class UserService {
     //   );
   }
 
-  private async findByMail(email: string): Promise<UserEntity | null> {
+  private async findByMail(email: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
       resolve(data.find((el: any) => el.email === email))
@@ -64,7 +64,8 @@ export class UserService {
       );
     }
 
-    const newUser = new UserEntity();
+    // const newUser = new UserEntity();
+    const newUser: any = {};
     newUser._id = v6()
     newUser.organization = original.organization;
     newUser.email = original.email;
@@ -170,7 +171,7 @@ export class UserService {
     );
   }
 
-  private buildDataRO(entity: UserEntity): any {
+  private buildDataRO(entity: any): any {
     const data = {
       _id: entity._id,
       email: entity.email,

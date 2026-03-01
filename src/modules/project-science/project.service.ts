@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
-import { ProjectScienceEntity } from './project.entity';
+// import { ProjectScienceEntity } from './project.entity';
 import { CreateDto, UpdateDto } from './dto';
 import { ProjectScienceData } from './project.interface';
 import { validate } from 'class-validator';
@@ -18,8 +18,8 @@ import { join } from 'node:path';
 @Injectable()
 export class ProjectScienceService {
   constructor(
-    @InjectRepository(ProjectScienceEntity)
-    private readonly repository: Repository<ProjectScienceEntity>,
+    // @InjectRepository(ProjectScienceEntity)
+    // private readonly repository: Repository<ProjectScienceEntity>,
     private readonly userService: UserService
   ) {}
 
@@ -78,16 +78,16 @@ export class ProjectScienceService {
   }
 
   async create(dto: CreateDto, token: string): Promise<ProjectScienceData> {
-    const data = await this.repository.findOneBy({ name: dto.name });
-    if (data) {
-      const errors = { project: 'DATA_ALREADY_EXSIST' };
-      throw new HttpException(
-        { message: 'Input data validation failed', errors },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const newEntity = new ProjectScienceEntity();
-
+    // const data = await this.repository.findOneBy({ name: dto.name });
+    // if (data) {
+    //   const errors = { project: 'DATA_ALREADY_EXSIST' };
+    //   throw new HttpException(
+    //     { message: 'Input data validation failed', errors },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
+    // const newEntity = new ProjectScienceEntity();
+    const newEntity: any = {}
     newEntity._id = v6();
     newEntity.name = dto.name;
     newEntity.type = dto.type;
@@ -174,7 +174,7 @@ export class ProjectScienceService {
     // return result
   }
 
-  private buildDataRO(entity: ProjectScienceEntity): ProjectScienceData {
+  private buildDataRO(entity: any): ProjectScienceData {
     return {
       _id: entity._id,
       name: entity.name,
