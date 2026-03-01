@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, StreamableFile} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getRepository, DeleteResult } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -13,6 +13,10 @@ import * as argon2 from 'argon2';
 import { v6 } from 'uuid';
 import * as CryptoJS from 'crypto-js';
 
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+
 @Injectable()
 export class UserService {
   constructor(
@@ -20,22 +24,33 @@ export class UserService {
     private readonly repository: Repository<UserEntity>,
   ) {}
 
-  // Promise<Array<UserEntity>>
-  async findAll(filter?: string): Promise<Array<any>> {
-    return await this.repository
-      .find()
-      .then(data => data
-        .filter((el: UserEntity) => filter ? el.type === filter : el)
-        .map((el: UserEntity) => this.buildDataRO(el))
-      );
+  async findAll(filter?: string): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const data = JSON
+        .parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+        .map((item: any) => this.buildDataRO(item))
+      resolve(data)
+    })
+
+    // return await this.repository
+    //   .find()
+    //   .then(data => data
+    //     .filter((el: UserEntity) => filter ? el.type === filter : el)
+    //     .map((el: UserEntity) => this.buildDataRO(el))
+    //   );
   }
 
   private async findByMail(email: string): Promise<UserEntity | null> {
-    const user = await this.repository.findOneBy({ email });
-    if (!user) {
-      return null;
-    }
-    return user;
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      resolve(data.find((el: any) => el.email === email))
+    })
+
+    // const user = await this.repository.findOneBy({ email });
+    // if (!user) {
+    //   return null;
+    // }
+    // return user;
   }
 
   async create(dto: CreateDto): Promise<any> {
@@ -58,52 +73,86 @@ export class UserService {
     newUser.projectIds = [];
     newUser.portfolioIds = [];
 
-    // TODO: check enitity validation
-    // return this.buildDataRO(await this.repository.findOneBy({ email: newUser.email }))
-    // const errors = await validate(newUser);
-    // if (errors.length > 0) {
-    //   const _errors = { user: 'USER_DATA_NOT_VALID' };
-    //   throw new HttpException(
-    //     { message: 'Input data validation failed', _errors },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // } else {
-      return this.buildDataRO(await this.repository.save(newUser))
-    // }
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      data.push(newUser)
+      writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
+      resolve(this.buildDataRO(newUser))
+    })
+    // return this.buildDataRO(await this.repository.save(newUser))
   }
 
   async update(dto: UpdateDto): Promise<any> {
-    const currentData = await this.repository.findOneBy({ _id: dto._id });
-    if (currentData) {
-      return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
-    }
-    return null
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const index = data.findIndex((el: any) => el._id === dto._id)
+      if (index > -1) {
+        data[index] = Object.assign(data[index], dto)
+        writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
+        resolve(data)
+      } else {
+        resolve({ STATUS: 'NOT_FOUND' })
+      }
+    })
+    // return new Promise<any>((resolve, reject) => {
+    //   const data = readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8')
+
+    //   resolve(data)
+    // })
+    // const currentData = await this.repository.findOneBy({ _id: dto._id });
+    // if (currentData) {
+    //   return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
+    // }
+    // return null
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    return await this.repository.delete({ _id: id });
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const index = data.findIndex((el: any) => el._id === id)
+      if (index > -1) {
+        data.splice(index, 1)
+        writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
+        resolve(data)
+      } else {
+        resolve({ STATUS: 'NOT_FOUND' })
+      }
+    })
+    // return await this.repository.delete({ _id: id });
   }
 
   async findById(id: string): Promise<any> {
-    const data = await this.repository.findOneBy({ _id: id });
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      const index = data.findIndex((el: any) => el._id === id)
+      if (index > -1) {
+        resolve(this.buildDataRO(data[index]))
+      } else {
+        resolve({ STATUS: 'NOT_FOUND' })
+      }
+    })
+    // const data = await this.repository.findOneBy({ _id: id });
+    // if (!data) {
+    //   const errors = { error: 'NOT_FOUND' };
+    //   throw new HttpException({ errors }, 401);
+    // }
 
-    if (!data) {
-      const errors = { error: 'NOT_FOUND' };
-      throw new HttpException({ errors }, 401);
-    }
-
-    return this.buildDataRO(data);
+    // return this.buildDataRO(data);
   }
-// Promise<UserRO>
+
   async findByEmail(email: any): Promise<any> {
-    const data = await this.repository.findOneBy({ email });
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
+      resolve(data.find((el: any) => el.email === email))
+    })
+    // const data = await this.repository.findOneBy({ email });
 
-    if (!data) {
-      const errors = { error: 'NOT_FOUND' };
-      throw new HttpException({ errors }, 401);
-    }
+    // if (!data) {
+    //   const errors = { error: 'NOT_FOUND' };
+    //   throw new HttpException({ errors }, 401);
+    // }
 
-    return this.buildDataRO(data);
+    // return this.buildDataRO(data);
   }
 
   public generateJWT(data) {

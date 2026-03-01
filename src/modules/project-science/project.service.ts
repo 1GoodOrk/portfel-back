@@ -12,6 +12,9 @@ import * as jwt from 'jsonwebtoken';
 import { SECRET } from '@port/config';
 import { UserService } from '../user/user.service';
 
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 @Injectable()
 export class ProjectScienceService {
   constructor(
@@ -21,32 +24,57 @@ export class ProjectScienceService {
   ) {}
 
   async findAll(token?: string): Promise<Array<ProjectScienceData>> {
-    if (token) {
-      const decoded: any = jwt.verify(token, SECRET);
-      const user = await this.userService.findByEmail(decoded.email);
-      const result: any = []
-      for (let i = 0; i < user.projectIds.length; i++) {
-        const found: any = await this.repository.findOneBy({ _id: user.projectIds[i] })
-        if (found) {
-          result.push(this.buildDataRO(found))
-        }
+    return new Promise<any>(async (resolve, reject) => {
+      if (token) {
+        const decoded: any = jwt.verify(token, SECRET);
+        const user = await this.userService.findByEmail(decoded.email);
+        const data = JSON
+          .parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+          .filter((item: any) => user.projectIds.find((projectId: any) => projectId === item._id))
+          .map((item: any) => this.buildDataRO(item))
+        resolve(data)
+      } else {
+        const data = JSON
+          .parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+          .map((item: any) => this.buildDataRO(item))
+        resolve(data)
       }
-      return result
-    }
-    return await this.repository
-      .find()
-      .then(data => data.map((el: ProjectScienceEntity) => this.buildDataRO(el)));
+    })
+    // if (token) {
+    //   const decoded: any = jwt.verify(token, SECRET);
+    //   const user = await this.userService.findByEmail(decoded.email);
+    //   const result: any = []
+    //   for (let i = 0; i < user.projectIds.length; i++) {
+    //     const found: any = await this.repository.findOneBy({ _id: user.projectIds[i] })
+    //     if (found) {
+    //       result.push(this.buildDataRO(found))
+    //     }
+    //   }
+    //   return result
+    // }
+    // return await this.repository
+    //   .find()
+    //   .then(data => data.map((el: ProjectScienceEntity) => this.buildDataRO(el)));
   }
 
   async findById(id: string): Promise<ProjectScienceData> {
-    const data = await this.repository.findOneBy({ _id: id });
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const index = data.findIndex((el: any) => el._id === id)
+      if (index > -1) {
+        resolve(this.buildDataRO(data[index]))
+      } else {
+        resolve({ STATUS: 'NOT_FOUND' })
+      }
+    })
+    // const data = await this.repository.findOneBy({ _id: id });
 
-    if (!data) {
-      const errors = { data: 'NOT_FOUND' };
-      throw new HttpException({ errors }, 401);
-    }
+    // if (!data) {
+    //   const errors = { data: 'NOT_FOUND' };
+    //   throw new HttpException({ errors }, 401);
+    // }
 
-    return this.buildDataRO(data);
+    // return this.buildDataRO(data);
   }
 
   async create(dto: CreateDto, token: string): Promise<ProjectScienceData> {
@@ -74,36 +102,47 @@ export class ProjectScienceService {
     newEntity.staff = dto.staff;
     newEntity.projectExpertiseIds = [] 
 
-    // TODO: error for validation => check functionality
-    // const errors = await validate(newEntity);
-    // if (errors.length > 0) {
-    //   const _errors = { data: 'NOT_VALID' };
-    //   throw new HttpException(
-    //     { message: 'Input data validation failed', _errors },
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // } else {
-    // console.log(this.buildDataRO(await this.repository.save(newEntity)))
-    // }
-    const saveNewEntity = await this.repository.save(newEntity)
-    const decoded: any = jwt.verify(token, SECRET);
-    const user = await this.userService.findByEmail(decoded.email);
-    user.projectIds.push(newEntity._id)
-    await this.userService.update(user);
-    return this.buildDataRO(saveNewEntity);
+    return new Promise<any>(async (resolve, reject) => {
+      const decoded: any = jwt.verify(token, SECRET);
+      const user = await this.userService.findByEmail(decoded.email);
+      console.log(user)
+      user.projectIds.push(newEntity._id)
+      await this.userService.update(user);
+
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      data.push(newEntity)
+      writeFileSync(join(process.cwd(), '/src/data/project-science.json'), JSON.stringify(data))
+      resolve(this.buildDataRO(newEntity))
+    })
+    // const saveNewEntity = await this.repository.save(newEntity)
+    // const decoded: any = jwt.verify(token, SECRET);
+    // const user = await this.userService.findByEmail(decoded.email);
+    // user.projectIds.push(newEntity._id)
+    // await this.userService.update(user);
+    // return this.buildDataRO(saveNewEntity);
   }
 
   async update(id: string, dto: UpdateDto): Promise<UpdateResult | null> {
-    const currentData = await this.repository.findOneBy({ _id: dto._id });
-    if (currentData) {
-      return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
-    }
-    return null
+    return new Promise<any>((resolve, reject) => {
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const index = data.findIndex((el: any) => el._id === dto._id)
+      if (index > -1) {
+        data[index] = Object.assign(data[index], dto)
+        writeFileSync(join(process.cwd(), '/src/data/project-science.json'), JSON.stringify(data))
+        resolve(data)
+      } else {
+        resolve({ STATUS: 'NOT_FOUND' })
+      }
+    })
+    // const currentData = await this.repository.findOneBy({ _id: dto._id });
+    // if (currentData) {
+    //   return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
+    // }
+    // return null
   }
 
   async delete(id: string, token: string): Promise<DeleteResult> {
-    const result = await this.repository.delete({ _id: id });
-    if (token) {
+    return new Promise<any>(async (resolve, reject) => {
       const decoded: any = jwt.verify(token, SECRET);
       const user = await this.userService.findByEmail(decoded.email);
       const index = user.projectIds.indexOf(id);
@@ -111,8 +150,28 @@ export class ProjectScienceService {
         user.projectIds.splice(index, 1);
       }
       await this.userService.update(user);
-    }
-    return result
+
+      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/project-science.json'), 'utf8'))
+      const indexData = data.findIndex((el: any) => el._id === id)
+      if (indexData > -1) {
+        data.splice(indexData, 1)
+        writeFileSync(join(process.cwd(), '/src/data/project-science.json'), JSON.stringify(data))
+        resolve(data)
+      } else {
+        resolve({ STATUS: 'NOT_FOUND' })
+      }
+    })
+    // const result = await this.repository.delete({ _id: id });
+    // if (token) {
+    //   const decoded: any = jwt.verify(token, SECRET);
+    //   const user = await this.userService.findByEmail(decoded.email);
+    //   const index = user.projectIds.indexOf(id);
+    //   if (index > -1) { 
+    //     user.projectIds.splice(index, 1);
+    //   }
+    //   await this.userService.update(user);
+    // }
+    // return result
   }
 
   private buildDataRO(entity: ProjectScienceEntity): ProjectScienceData {

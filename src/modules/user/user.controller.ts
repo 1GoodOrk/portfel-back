@@ -41,6 +41,7 @@ export class UserController {
     // @User('_id') _id: string,
     @Body('data') data: UpdateDto,
   ): Promise<UserRO> {
+    console.log(1231)
     return await this.userService.update(data);
   }
 
@@ -58,22 +59,21 @@ export class UserController {
   // @UsePipes(new ValidationPipe())
   @Get('login')
   async login(@Req() req: Request): Promise<any> {
-
     if (!req.body) {
       const errors = { message: 'NOT_FOUND' };
       throw new HttpException({ errors }, 401);
     }
-
     const { id, email, password, portfolioIds, projectIds, type } = req.body;
-    const data = { 
-      id, 
-      email, 
-      password,
-      type,
-      token: await this.userService.generateJWT(req.body), 
-      portfolioIds, 
-      projectIds 
-    };
-    return { data };
+    return this.userService.findByEmail(email);
+    // const data = { 
+    //   id, 
+    //   email, 
+    //   password,
+    //   type,
+    //   token: await this.userService.generateJWT(req.body), 
+    //   portfolioIds, 
+    //   projectIds 
+    // };
+    // return { data };
   }
 }
