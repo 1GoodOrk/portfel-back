@@ -3,7 +3,7 @@ import { NestMiddleware, HttpStatus, Injectable } from '@nestjs/common';
 // import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { SECRET } from '@port/config';
+// import { SECRET } from '@port/config';
 import { UserService } from './user.service';
 import * as CryptoJS from 'crypto-js';
 
@@ -12,7 +12,7 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly userService: UserService) {}
 
   async use(req: Request | any, res: Response, next: NextFunction) {
-    const original = JSON.parse(CryptoJS.AES.decrypt(req.headers.authorization?.split(' ')[1], SECRET).toString(CryptoJS.enc.Utf8));
+    const original = JSON.parse(CryptoJS.AES.decrypt(req.headers.authorization?.split(' ')[1], 'EAAFCE8ECC522E391DEC31D8F5C54').toString(CryptoJS.enc.Utf8));
     // const [type, token] = req.headers.authorization?.split(' ') ?? [];
     // TODO: token auth
     if (original.email) {
