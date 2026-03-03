@@ -1,12 +1,10 @@
 import { Injectable, StreamableFile} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, getRepository, DeleteResult } from 'typeorm';
-// import { UserEntity } from './user.entity';
+import { UserEntity } from './user.entity';
 import { CreateDto, LoginDto, UpdateDto } from './dto';
 const jwt = require('jsonwebtoken');
 import { SECRET } from '../../config';
-import { UserRO } from './user.interface';
-import { validate } from 'class-validator';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { HttpStatus } from '@nestjs/common';
 import * as argon2 from 'argon2';
@@ -20,37 +18,25 @@ import { join } from 'node:path';
 @Injectable()
 export class UserService {
   constructor(
-    // @InjectRepository(UserEntity)
-    // private readonly repository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private readonly repository: Repository<UserEntity>,
   ) {}
 
   async findAll(filter?: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      const data = JSON
-        .parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-        .map((item: any) => this.buildDataRO(item))
-      resolve(data)
-    })
-
-    // return await this.repository
-    //   .find()
-    //   .then(data => data
-    //     .filter((el: UserEntity) => filter ? el.type === filter : el)
-    //     .map((el: UserEntity) => this.buildDataRO(el))
-    //   );
+    return await this.repository
+      .find()
+      .then(data => data
+        .filter((el: UserEntity) => filter ? el.type === filter : el)
+        .map((el: UserEntity) => this.buildDataRO(el))
+      );
   }
 
   private async findByMail(email: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-      resolve(data.find((el: any) => el.email === email))
-    })
-
-    // const user = await this.repository.findOneBy({ email });
-    // if (!user) {
-    //   return null;
-    // }
-    // return user;
+    const user = await this.repository.findOneBy({ email });
+    if (!user) {
+      return null;
+    }
+    return user;
   }
 
   async create(dto: CreateDto): Promise<any> {
@@ -74,86 +60,40 @@ export class UserService {
     newUser.projectIds = [];
     newUser.portfolioIds = [];
 
-    return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-      data.push(newUser)
-      writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
-      resolve(this.buildDataRO(newUser))
-    })
-    // return this.buildDataRO(await this.repository.save(newUser))
+    return this.buildDataRO(await this.repository.save(newUser))
   }
 
   async update(dto: UpdateDto): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-      const index = data.findIndex((el: any) => el._id === dto._id)
-      if (index > -1) {
-        data[index] = Object.assign(data[index], dto)
-        writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
-        resolve(data)
-      } else {
-        resolve({ STATUS: 'NOT_FOUND' })
-      }
-    })
-    // return new Promise<any>((resolve, reject) => {
-    //   const data = readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8')
-
-    //   resolve(data)
-    // })
-    // const currentData = await this.repository.findOneBy({ _id: dto._id });
-    // if (currentData) {
-    //   return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
-    // }
-    // return null
+    const currentData = await this.repository.findOneBy({ _id: dto._id });
+    if (currentData) {
+      return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
+    }
+    return null
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-      const index = data.findIndex((el: any) => el._id === id)
-      if (index > -1) {
-        data.splice(index, 1)
-        writeFileSync(join(process.cwd(), '/src/data/users.json'), JSON.stringify(data))
-        resolve(data)
-      } else {
-        resolve({ STATUS: 'NOT_FOUND' })
-      }
-    })
-    // return await this.repository.delete({ _id: id });
+    return await this.repository.delete({ _id: id });
   }
 
   async findById(id: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-      const index = data.findIndex((el: any) => el._id === id)
-      if (index > -1) {
-        resolve(this.buildDataRO(data[index]))
-      } else {
-        resolve({ STATUS: 'NOT_FOUND' })
-      }
-    })
-    // const data = await this.repository.findOneBy({ _id: id });
-    // if (!data) {
-    //   const errors = { error: 'NOT_FOUND' };
-    //   throw new HttpException({ errors }, 401);
-    // }
+    const data = await this.repository.findOneBy({ _id: id });
+    if (!data) {
+      const errors = { error: 'NOT_FOUND' };
+      throw new HttpException({ errors }, 401);
+    }
 
-    // return this.buildDataRO(data);
+    return this.buildDataRO(data);
   }
 
   async findByEmail(email: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      const data: any = JSON.parse(readFileSync(join(process.cwd(), '/src/data/users.json'), 'utf8'))
-      resolve(data.find((el: any) => el.email === email))
-    })
-    // const data = await this.repository.findOneBy({ email });
+    const data = await this.repository.findOneBy({ email });
 
-    // if (!data) {
-    //   const errors = { error: 'NOT_FOUND' };
-    //   throw new HttpException({ errors }, 401);
-    // }
+    if (!data) {
+      const errors = { error: 'NOT_FOUND' };
+      throw new HttpException({ errors }, 401);
+    }
 
-    // return this.buildDataRO(data);
+    return this.buildDataRO(data);
   }
 
   public generateJWT(data) {
