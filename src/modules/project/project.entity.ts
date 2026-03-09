@@ -22,19 +22,7 @@ export class ProjectEntity {
   responsibleName: string;
 
   @Column()
-  responsibleSurname: string;
-
-  @Column()
-  responsibleLastname: string;
-
-  @Column()
   managerName: string;
-
-  @Column()
-  managerSurname: string;
-
-  @Column()
-  managerLastname: string;
 
   @Column()
   responsibleOrganization: string;

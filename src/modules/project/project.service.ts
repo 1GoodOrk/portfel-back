@@ -65,11 +65,7 @@ export class ProjectService {
     newEntity.subinfo = dto.subinfo;
     newEntity.type = dto.type;
     newEntity.responsibleName = dto.responsibleName;
-    newEntity.responsibleSurname = dto.responsibleSurname;
-    newEntity.responsibleLastname = dto.responsibleLastname;
     newEntity.managerName = dto.managerName;
-    newEntity.managerSurname = dto.managerSurname;
-    newEntity.managerLastname = dto.managerLastname;
     newEntity.responsibleOrganization = dto.responsibleOrganization;
     newEntity.budget = dto.budget;
     newEntity.budgetSource = dto.budgetSource;
@@ -88,11 +84,12 @@ export class ProjectService {
     newEntity.addressEnd = dto.addressEnd;
     newEntity.des = dto.des;
     newEntity.img = dto.img;
+    // newEntity.img = 'https://f.kyivmaps.com/location/794/emjGu.jpg';
     newEntity.portfolioId = dto.portfolioId;
     newEntity.dateCreation = dto.dateCreation;
     newEntity.dateInitialization = dto.dateInitialization;
     newEntity.permissionDuration = dto.permissionDuration;
-    newEntity.score = dto.score;
+    newEntity.score = 0.33 * (dto.budget) + 0.33 * dto.permissionDuration + 0.33 * dto.forecastProjectTaskAmount;
     newEntity.priority = dto.priority;
     newEntity.optionEco = dto.options.eco;
     newEntity.optionWar = dto.options.war;
@@ -122,6 +119,7 @@ export class ProjectService {
   async update(id: string, dto: UpdateDto): Promise<UpdateResult | null> {
     const currentData = await this.repository.findOneBy({ _id: dto._id });
     if (currentData) {
+      dto.score = 0.33 * (dto.budget) + 0.33 * dto.permissionDuration + 0.33 * dto.forecastProjectTaskAmount
       return await this.repository.update({ _id: dto._id }, Object.assign(currentData, dto));
     }
     return null
@@ -148,11 +146,7 @@ export class ProjectService {
       subinfo: entity.subinfo,
       type: entity.type,
       responsibleName: entity.responsibleName,
-      responsibleSurname: entity.responsibleSurname,
-      responsibleLastname: entity.responsibleLastname,
       managerName: entity.managerName,
-      managerSurname: entity.managerSurname,
-      managerLastname: entity.managerLastname,
       responsibleOrganization: entity.responsibleOrganization,
       budget: entity.budget,
       budgetSource: entity.budgetSource,

@@ -4,11 +4,7 @@ export class UpdateDto {
   readonly subinfo: string;
   readonly type: string;
   readonly responsibleName: string;
-  readonly responsibleSurname: string;
-  readonly responsibleLastname: string;
   readonly managerName: string;
-  readonly managerSurname: string;
-  readonly managerLastname: string;
   readonly responsibleOrganization: string;
   readonly budget: number;
   readonly budgetSource: string;
@@ -24,7 +20,7 @@ export class UpdateDto {
   readonly addressStart: string;
   readonly addressEnd: string;
   readonly des: string;
-  readonly img: string;
+  img: string;
   readonly portfolioId?: {
     name: string;
     tier: string;
@@ -33,7 +29,7 @@ export class UpdateDto {
   readonly dateCreation: string;
   readonly dateInitialization: string;
   readonly permissionDuration: number;
-  readonly score: number;
+  score: number;
   readonly priority: number;
   readonly options: {
     eco: number;

@@ -4,11 +4,7 @@ export interface ProjectData {
   subinfo: string;
   type: string;
   responsibleName: string;
-  responsibleSurname: string;
-  responsibleLastname: string;
   managerName: string;
-  managerSurname: string;
-  managerLastname: string;
   responsibleOrganization: string;
   budget: number;
   budgetSource: string;

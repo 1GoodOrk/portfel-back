@@ -14,19 +14,7 @@ export class CreateDto {
   readonly responsibleName: string;
 
   @IsNotEmpty()
-  readonly responsibleSurname: string;
-
-  @IsNotEmpty()
-  readonly responsibleLastname: string;
-
-  @IsNotEmpty()
   readonly managerName: string;
-
-  @IsNotEmpty()
-  readonly managerSurname: string;
-
-  @IsNotEmpty()
-  readonly managerLastname: string;
 
   @IsNotEmpty()
   readonly responsibleOrganization: string;
@@ -93,7 +81,7 @@ export class CreateDto {
   readonly permissionDuration: number;
 
   @IsNotEmpty()
-  readonly score: number;
+  score: number;
 
   @IsNotEmpty()
   readonly priority: number;
