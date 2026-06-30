@@ -8,7 +8,8 @@ import { UserModule } from './modules/user/user.module';
 // import { ProjectModule } from './modules/project/project.module';
 // import { ProjectVehicleModule } from './modules/project-vehicle/project.module';
 // import { ProjectScienceModule } from './modules/project-science/project.module';
-import { ProjectLogisticModule } from './modules/project-logistic/project.module';
+// import { ProjectLogisticModule } from './modules/project-logistic/project.module';
+import { ProjectTransportModule } from './modules/projects/project-trasport/project.module';
 import { MessageModule } from './modules/message/message.module';
 import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
 // import { ExpertiseModule } from './modules/expertise/expertise.module';
@@ -23,7 +24,7 @@ import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
       synchronize: true,
     }),
     UserModule,
-    ProjectLogisticModule,
+    ProjectTransportModule,
     // ProjectVehicleModule,
     // ExpertiseModule,
     MessageModule
