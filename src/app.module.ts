@@ -4,10 +4,14 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserModule } from './modules/user/user.module';
-import { PortfolioModule } from './modules/portfolio/portfolio.module';
-import { ProjectModule } from './modules/project/project.module';
+// import { PortfolioModule } from './modules/portfolio/portfolio.module';
+// import { ProjectModule } from './modules/project/project.module';
+// import { ProjectVehicleModule } from './modules/project-vehicle/project.module';
+// import { ProjectScienceModule } from './modules/project-science/project.module';
+import { ProjectLogisticModule } from './modules/project-logistic/project.module';
 import { MessageModule } from './modules/message/message.module';
 import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
+// import { ExpertiseModule } from './modules/expertise/expertise.module';
 
 @Module({
   imports: [
@@ -19,8 +23,9 @@ import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
       synchronize: true,
     }),
     UserModule,
-    PortfolioModule,
-    ProjectModule,
+    ProjectLogisticModule,
+    // ProjectVehicleModule,
+    // ExpertiseModule,
     MessageModule
   ],
   controllers: [AppController],

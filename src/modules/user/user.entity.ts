@@ -8,8 +8,6 @@ import {
 } from 'typeorm';
 import { IsEmail } from 'class-validator';
 import * as argon2 from 'argon2';
-import { ProjectEntity } from '../project/project.entity';
-import { PortfolioEntity } from '../portfolio/portfolio.entity';
 
 @Entity('user')
 export class UserEntity {
