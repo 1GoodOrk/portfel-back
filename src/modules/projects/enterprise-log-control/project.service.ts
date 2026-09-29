@@ -58,6 +58,15 @@ export class EnterpriseLogService {
           data = titles.filter((el: string) => el && el !== "World business").slice(8, 19)
           data = await translate(data.join('07CC'), { to: 'uk' })
           data = data.text.split('07CC')
+        } else if (query === 'Останні новини логістики у світі') {
+          const page = await browser.newPage()
+          await page.goto("https://www.supplychainbrain.com/")
+          // const titles = await page.$$eval('h1', (nodes: any) => nodes.slice(0, 80).map((n) => n.textContent?.trim()));
+          const titles = await page.$$eval('p', (nodes: any) => nodes.slice(0, 20).map((n) => n.textContent?.trim()));
+          // data = [...titles, ...titles1]
+          data = titles
+          data = await translate(data.join('07CC'), { to: 'uk' })
+          data = data.text.split('07CC')
         } else {
           const page = await browser.newPage()
           await page.goto("https://duckduckgo.com/?ia=news&q=" + encodeURIComponent(query))
