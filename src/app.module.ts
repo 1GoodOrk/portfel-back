@@ -9,7 +9,8 @@ import { UserModule } from './modules/user/user.module';
 // import { ProjectVehicleModule } from './modules/project-vehicle/project.module';
 // import { ProjectScienceModule } from './modules/project-science/project.module';
 // import { ProjectLogisticModule } from './modules/project-logistic/project.module';
-import { ProjectTransportModule } from './modules/projects/project-trasport/project.module';
+// import { ProjectTransportModule } from './modules/projects/project-trasport/project.module';
+import { ProjectMeliksetovModule } from './modules/projects/project-meliksetov/project.module';
 // import { ProjectAutoModule } from './modules/projects/project-auto/project.module'; // oliynik
 // import { EnterpriseLogModule } from './modules/projects/enterprise-log-control/project.module';
 import { MessageModule } from './modules/message/message.module';
@@ -26,8 +27,7 @@ import { MONGO_DB, MONGO_DB_NAME } from '@port/config';
       synchronize: true,
     }),
     UserModule,
-    // EnterpriseLogModule,
-    ProjectTransportModule,
+    ProjectMeliksetovModule,
     MessageModule
   ],
   controllers: [AppController],
