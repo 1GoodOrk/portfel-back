@@ -9,6 +9,9 @@ export class CreateDto {
   readonly des: string;
   
   @IsNotEmpty()
+  readonly code: string;
+
+  @IsNotEmpty()
   readonly subinfo: string;
   
   @IsNotEmpty()
@@ -18,17 +21,5 @@ export class CreateDto {
   readonly responsibleName: string;
   
   @IsNotEmpty()
-  readonly phases: any;
-
-  @IsNotEmpty()
-  readonly stackholders: any;
-
-  @IsNotEmpty()
-  readonly stackholderData: any;
-
-  @IsNotEmpty()
   readonly analyze: any;
-
-  @IsNotEmpty()
-  readonly balance: any;
 }

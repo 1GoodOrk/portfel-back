@@ -31,14 +31,9 @@ export class ProjectMeliksetovEntity {
   responsibleOrganization: string;
 
   @Column()
-  stackholders: any;
-
-  @Column()
-  stackholderData: any;
+  code: any;
 
   @Column()
   analyze: any;
 
-  @Column()
-  balance: any;
 }

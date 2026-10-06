@@ -64,13 +64,11 @@ export class ProjectMeliksetovService {
     newEntity._id = v6();
     newEntity.name = dto.name;
     newEntity.des = dto.des;
+    newEntity.code = dto.code;
     newEntity.priority = dto.priority;
     newEntity.subinfo = dto.subinfo;
     newEntity.responsibleName = dto.responsibleName;
-    newEntity.stackholders = dto.stackholders;
-    newEntity.stackholderData = dto.stackholderData;
     newEntity.analyze = dto.analyze;
-    newEntity.balance = dto.balance;
     
     // TODO: error for validation => check functionality
     // const errors = await validate(newEntity);
@@ -117,14 +115,12 @@ export class ProjectMeliksetovService {
     return {
       _id: entity._id,
       name: entity.name,
+      code: entity.code,
       subinfo: entity.subinfo,
       des: entity.des,
       priority: entity.priority,
       responsibleName: entity.responsibleName,
-      stackholders: entity.stackholders,
-      stackholderData: entity.stackholderData,
-      analyze: entity.analyze,
-      balance: entity.balance
+      analyze: entity.analyze
     };
   }
 }
