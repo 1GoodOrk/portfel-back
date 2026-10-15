@@ -1,34 +1,72 @@
-version: '3.7'
+# version: '3.7'
 
 services:
-  nest:
-    container_name: 'nest'
-    build: .
+  dev:
+    container_name: nestjs_api_dev
+    image: nestjs-api-dev:1.0.0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      # command: npm run start:dev
+    ports:
+      - 27182:27182
+    networks:
+      - nesjs-network
+    depends_on:
+      - mongodb
     volumes:
       - .:/usr/src/app
-      # - /usr/src/app/node_modules
-    ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
-      - 27182:27182
-    command: npm run start:debug
-    env_file:
-      - .env
-    depends_on:
-      - mongo
-  mongo:
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  # nest:
+  #   container_name: 'nest'
+  #   build: .
+  #   volumes:
+  #     - .:/usr/src/app
+  #     # - /usr/src/app/node_modules
+  #   ports:
+  #     - 27182:27182
+  #   command: npm run start:debug
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - mongo
+  mongodb:
     image: mongo:latest
-    container_name: 'nest_mongo'
+    container_name: mongodb
     volumes:
-      - mongodb_data_container:/data/db
+      - ./database:/data/db
+    ports:
+      - 27017:27017
     env_file:
       - .env
-    environment:
-      MONGODB_USER: root
-      MONGODB_DATABASE: db
-      MONGODB_PASS: '1234'
+    networks:
+      - nesjs-network
+    restart: always
+    # environment:
+    #   MONGODB_USER: root
+    #   MONGODB_DATABASE: db
+    #   MONGODB_PASS: '1234'
+    # ports:
+    #   - ${MONGO_PORT}:${MONGO_PORT}
+  prod:
+    container_name: nestjs_api_prod
+    image: nestjs-api-prod:1.0.0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
     ports:
-      - ${MONGO_PORT}:${MONGO_PORT}
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - nesjs-network
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
 networks:
-  webnet:
-volumes:
-  mongodb_data_container:
+  nesjs-network:
+    driver: bridge

@@ -11,6 +11,7 @@ import { v6 } from 'uuid';
 import * as jwt from 'jsonwebtoken';
 import { SECRET } from '@port/config';
 import { UserService } from '../../user/user.service';
+import fs from 'fs';
 
 @Injectable()
 export class ProjectMeliksetovService {
@@ -111,7 +112,21 @@ export class ProjectMeliksetovService {
     return result
   }
 
+  private getDataIntoJSONFile(entity: any) {
+    fs.writeFileSync('./data.json', JSON.stringify({
+      _id: entity._id,
+      name: entity.name,
+      code: entity.code,
+      subinfo: entity.subinfo,
+      des: entity.des,
+      priority: entity.priority,
+      responsibleName: entity.responsibleName,
+      analyze: entity.analyze
+    }));
+  }
+
   private buildDataRO(entity: any): any {
+    // this.getDataIntoJSONFile(entity)
     return {
       _id: entity._id,
       name: entity.name,

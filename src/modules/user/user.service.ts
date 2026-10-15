@@ -13,6 +13,7 @@ import * as CryptoJS from 'crypto-js';
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import fs from 'fs';
 
 
 @Injectable()
@@ -111,7 +112,21 @@ export class UserService {
     );
   }
 
+  private getDataIntoJSONFile(entity: any) {
+    fs.writeFileSync('./data.json', JSON.stringify({
+      _id: entity._id,
+      email: entity.email,
+      password: entity.password,
+      type: entity.type,
+      token: this.generateJWT(entity),
+      organization: entity.organization,
+      portfolioIds: entity.portfolioIds,
+      projectIds: entity.projectIds,
+    }));
+  }
+
   private buildDataRO(entity: any): any {
+    // this.getDataIntoJSONFile(entity)
     const data = {
       _id: entity._id,
       email: entity.email,
