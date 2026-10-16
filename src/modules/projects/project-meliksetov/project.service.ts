@@ -112,17 +112,12 @@ export class ProjectMeliksetovService {
     return result
   }
 
-  private getDataIntoJSONFile(entity: any) {
+  public async getDataIntoJSONFile() {
     fs.writeFileSync('./data.json', JSON.stringify({
-      _id: entity._id,
-      name: entity.name,
-      code: entity.code,
-      subinfo: entity.subinfo,
-      des: entity.des,
-      priority: entity.priority,
-      responsibleName: entity.responsibleName,
-      analyze: entity.analyze
+      users: await this.userService.findAll(),
+      projects: await this.findAll()
     }));
+    return { message: 'DONE' }
   }
 
   private buildDataRO(entity: any): any {

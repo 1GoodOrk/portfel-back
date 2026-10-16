@@ -23,6 +23,11 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class ProjectMeliksetovController {
   constructor(private readonly projectService: ProjectMeliksetovService) {}
 
+  @Get('projects-meliksetov/save')
+  async saveData(): Promise<any> {
+    return await this.projectService.getDataIntoJSONFile();
+  }
+
   @Get('projects-meliksetov/:id')
   async findOne(@Param() params): Promise<any> {
     return await this.projectService.findById(params.id);
